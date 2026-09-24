@@ -47,6 +47,8 @@
   \usepackage{xcolor}
 \fi
 \usepackage{afterpage}
+\usepackage{floatpag}
+\floatpagestyle{empty}   % páginas de lámina sin cornisa ni folio
 \usepackage{needspace}
 \usepackage[a4paper]{geometry}
 \usepackage{titlesec}
@@ -171,8 +173,11 @@
 % Advertencia / precaución
 % No se parte: una advertencia cortada deja una línea sola en la página
 % siguiente y se lee como si fuera otra cosa.
+% Además va pegada al texto que la precede: nunca queda sola arriba de
+% una página, separada de su ficha.
 \newtcolorbox{cuidado}[1][Atención]{
   enhanced,
+  before={\par\nobreak\vspace{0.6\baselineskip}\nobreak\noindent},
   colback=white, colframe=terracota,
   boxrule=0.8pt, arc=0pt,
   left=1.1em, right=1.1em, top=0.8em, bottom=0.8em,
@@ -182,12 +187,18 @@
   title={\MakeUppercase{#1}}
 }
 
+% Salta de página solo si no entran #1 de espacio. A diferencia de
+% \needspace, no deja un punto de corte preferido (\penalty-100): con
+% él, LaTeX cortaba antes de la ficha aunque sobrara media página.
+\newcommand{\necesita}[1]{%
+  \par\ifdim\dimexpr\pagegoal-\pagetotal\relax<#1\relax\newpage\fi}
+
 % --------------------------- Fichas de herbario ----------------------
 % \begin{planta}{Nombre común}{Nombre científico}{Parte que se usa}
 % El \needspace evita que el nombre de la planta quede solo al pie de
 % una página, separado de su texto.
 \newenvironment{planta}[3]{%
-  \par\needspace{8\baselineskip}\vspace{1.4em}\noindent
+  \par\necesita{8\baselineskip}\vspace{1.4em}\noindent
   {\sffamily\bfseries\large\color{verdehuerta}#1}\quad
   {\itshape\small\color{gris}#2}\par
   \vspace{0.15em}
@@ -269,10 +280,15 @@
   \nobreak\noindent\hspace*{0.8em}#3\par\vspace{0.35em}}
 
 % Filete ornamental de cierre de capítulo
+% Si el filete no entra en la página, se omite: un filete solo en una
+% página nueva se lee como una página en blanco.
 \newcommand{\cierre}{%
-  \par\vspace{1.6em}
+  \par
+  \ifdim\pagetotal=0pt\relax\else
+  \ifdim\dimexpr\pagegoal-\pagetotal\relax<5\baselineskip\relax\else
+  \vspace{1.6em}
   \begin{center}\color{verdehoja}\pgfornament[width=2.6cm]{88}\end{center}
-  \vspace{0.4em}}
+  \vspace{0.4em}\fi\fi}
 
 % Epígrafe bajo el título de capítulo
 \newcommand{\epigrafe}[2]{%
@@ -510,8 +526,8 @@ huérfano de madre naturaleza.
 
 Este sistema nos fue alejando cada vez más de la sabiduría antigua y de
 la intuición innata que todos llevamos dentro para sanar nuestro cuerpo
-y nuestra alma, que al final son una sola entidad indivisible. Al tener
-un enfermo más, tienen un eslabón más en la larga cadena de consumo.
+y nuestra alma, que al final son una sola entidad indivisible. Cada enfermo
+más es un eslabón más en la larga cadena de consumo.
 Estamos alimentando al monstruo sin siquiera notarlo.
 
 De las plantas medicinales, que son casi todas, porque cualquiera tiene
@@ -799,6 +815,12 @@ se le atribuye aliviar el dolor de cabeza, de garganta y de muelas, y
 los malestares de riñones, hígado y vejiga. Con la cáscara del fruto
 machacada y dejada en agua se hace una bebida a la que se atribuye
 ayudar a adelgazar.
+\begin{cuidado}[Los frutos, con mesura]
+No hay evidencia de que la bebida de cáscara de molle haga adelgazar, y
+los frutos en cantidad irritan el estómago y el intestino, sobre todo en
+los chicos. No se usa en el embarazo ni como reemplazo de una consulta
+por el peso.
+\end{cuidado}
 \end{planta}
 
 \laminadiferida{img/11-molle.jpg}{%
@@ -824,14 +846,14 @@ Ante la sospecha, consultar.
 \begin{planta}{Atamisqui}{Atamisquea emarginata}{Ramas y hojas}
 \phantomsection\label{pl-atamisqui}%
 El nombre se suele explicar desde el quechua, donde \emph{misqui}
-significa dulce. Arbusto grande, de
-hasta un metro y medio, ramas rectas, corteza verde amarillenta, hojas
+significa dulce. Arbusto ramoso, de uno a
+tres metros de alto, ramas rectas, corteza verde amarillenta, hojas
 pequeñas y ovaladas de color verde grisáceo. Las ramas en cocimiento y
 usadas en baños alivian los dolores de huesos; la infusión se usó
 tradicionalmente contra la clorosis, la insuficiencia de hierro en la
 sangre, porque se le atribuye contenido de ese mineral. Las ramas calentadas en
 las cenizas y aplicadas sobre los músculos calman dolores reumáticos y
-contracturas. La infusión es buen reconstituyente hepático, y las hojas
+contracturas. A la infusión se la tiene por reconstituyente del hígado, y las hojas
 en cocimiento se usaron contra la acidez estomacal. También se lo conoce
 como «mata-gusanos»: se usaba para curar las faras de los animales, y
 sus ramas mezcladas con las vainas de algarroba almacenadas resultaban
@@ -969,12 +991,18 @@ los dos mismos territorios: la digestión y el ánimo.
 Planta muy perfumada, de aroma a limón, de alrededor de un metro de
 altura, con hojas pequeñas y lanceoladas de color verde claro, dispuestas
 de a tres o cuatro alrededor del tallo. En infusión se usa como tónico
-estomacal, sedante y carminativo. Se lo usa como
-antidepresivo suave; alivia jaquecas y fiebres, y se lo recomienda para
+estomacal, sedante y carminativo. La tradición lo usa como
+antidepresivo suave, para aliviar jaquecas y fiebres, y lo recomienda para
 el insomnio y los estados de ansiedad. Se le atribuyen propiedades
-cardiotónicas, con buen resultado sobre las palpitaciones. En
-cocimiento, usado localmente, calma el prurito, las alergias y los
+cardiotónicas, y en el valle se lo toma para las palpitaciones. En
+cocimiento, usado localmente, se lo emplea para el prurito, las alergias y los
 dolores reumáticos y neurálgicos.
+\begin{cuidado}[Palpitaciones: primero el médico]
+Las palpitaciones pueden ser el aviso de un problema del corazón, y eso
+lo tiene que ver un médico antes que nada. Quien tome medicación para el
+corazón, para la presión o para dormir consulte antes de sumar el
+cedrón de todos los días.
+\end{cuidado}
 \end{planta}
 
 \begin{planta}{Incayuyo}{Lippia integrifolia}{Hojas y flores}
@@ -1019,11 +1047,11 @@ muy aromáticas al estrujarlas; flores pequeñas y lilas, reunidas en
 cabezuelas que nacen de la axila de las hojas. El nombre de salvia se
 usa también para especies del género \textit{Salvia}, de flor azul, que
 son otras plantas: conviene confirmar cuál se tiene antes de usarla.
-La tradición la considera un excelente digestivo, y como
-antiespasmódico dice que da muy buenos resultados. En forma tópica se usa para las hemorroides: se amortigua la
+La tradición la considera un excelente digestivo y un buen
+antiespasmódico. En forma tópica se usa para las hemorroides: se amortigua la
 hoja con la mano y se coloca. En infusión es sudorífica y emenagoga, y
-es un excelente descongestivo de las vías respiratorias: tos, faringitis,
-laringitis: se le atribuye calmar el dolor y cicatrizar la garganta de
+se la usa como descongestivo en la tos, la faringitis y la laringitis;
+se le atribuye calmar el dolor y cicatrizar la garganta de
 manera casi inmediata. El tratamiento debe continuarse al menos tres o
 cuatro días, con infusiones tres veces por día.
 \begin{cuidado}[No en el embarazo]
@@ -1031,9 +1059,6 @@ Por ser emenagoga, es decir, por estimular el flujo menstrual, la salvia
 mora no se usa durante el embarazo.
 \end{cuidado}
 \end{planta}
-
-\lamina[0.82\textwidth]{img/13-lamina-aromaticas.jpg}{%
-  Cedrón, incayuyo y salvia mora: las tres aromáticas de la casa.}
 
 \begin{planta}{Marrubio}{Marrubium vulgare}{Hojas y semillas}
 \phantomsection\label{pl-marrubio}%
@@ -1043,11 +1068,11 @@ redondeadas, arrugadas y de borde festoneado, de color verde grisáceo, y
 flores blancas diminutas en anillos apretados alrededor del tallo, con
 un cáliz de dientes ganchudos que se prende a la ropa. Se usa
 en infusión para las afecciones respiratorias y como expectorante.
-Controla la acidez estomacal, y en caso de fiebre se la usa como
-antitérmica. Ayuda a la digestión y se la emplea para tratar afecciones
-nerviosas; alivia los trastornos de la menopausia. Se le atribuye
-disminuir los niveles de azúcar en la sangre, por lo que está
-recomendada para quienes tratan esa dolencia. Las hojas y semillas
+Se la toma para la acidez estomacal, y en caso de fiebre se la usa como
+antitérmica. Se la tiene por buena para la digestión y se la emplea en afecciones
+nerviosas y en los trastornos de la menopausia. Se le atribuye
+disminuir los niveles de azúcar en la sangre, y por eso la tradición la
+recomienda a quienes tienen diabetes. Las hojas y semillas
 machacadas, en forma de pomada, se usaron para el bocio, y en baños y
 fomentos para los dolores de espalda.
 \begin{cuidado}[Diabetes y embarazo]
@@ -1057,8 +1082,11 @@ Tampoco se usa durante el embarazo.
 \end{cuidado}
 \end{planta}
 
-\lamina[0.74\textwidth]{img/14-lamina-digestivas.jpg}{%
-  Arcayuyo y marrubio, los dos amargos que trabajan sobre el estómago.}
+\lamina[0.82\textwidth]{img/13-lamina-aromaticas.jpg}{%
+  Cedrón, incayuyo y salvia mora: las tres aromáticas de la casa.}
+
+\laminapagina{img/14-lamina-digestivas.jpg}{%
+  Arcayuyo y marrubio, dos yuyos del estómago: uno dulce y otro amargo.}
 
 \cierre
 
@@ -1071,20 +1099,24 @@ Tampoco se usa durante el embarazo.
 Hierba que se abre en roseta, de hojas lanceoladas y ovales con
 nervaduras marcadas y flores en espigas. Como cataplasma sirve para
 quemaduras y úlceras. Las infusiones se usan para limpiar riñones,
-intestino y vejiga, y para los dolores de garganta; a la planta, usada
-en tos,
-bronquitis, laringitis y faringitis, se le atribuyen propiedades
-antibacterianas, descongestionantes y expectorantes. El jarabe se prepara machacando las
+intestino y vejiga, y para los dolores de garganta. En la tos, la
+bronquitis, la laringitis y la faringitis se la usa porque se le
+atribuyen propiedades antibacterianas, descongestionantes y
+expectorantes. El jarabe se prepara machacando las
 hojas, filtrando el líquido y disolviéndolo con azúcar a baño maría
 —con poco calor, porque el calor fuerte destruye las propiedades—; un
-par de cucharaditas al día disminuyen el dolor de las úlceras de
-estómago. La tradición le atribuye a la infusión propiedades
+par de cucharaditas al día, dice la tradición, alivian el dolor de las
+úlceras de estómago. La tradición le atribuye a la infusión propiedades
 hemostáticas: detener el sangrado tanto de cortaduras como de fístulas. Una hoja bien lavada
 aplicada sobre una herida ayuda a detener el flujo de sangre, a
 cicatrizar y a prevenir infecciones. Una gotita del jugo de hojas
-machacadas se usa para el dolor de oídos, nunca si el oído supura o
-hubo un golpe fuerte, porque el tímpano puede estar perforado. Se puede comer en ensalada: tiene
+machacadas se usa para el dolor de oídos. Se puede comer en ensalada: tiene
 vitaminas A, B1, C y calcio.
+\begin{cuidado}[Nada en el oído si supura]
+Nunca se pone nada en el oído si supura, si hubo un golpe fuerte o si
+el dolor viene con fiebre: el tímpano puede estar perforado. En los
+chicos, el dolor de oído lo ve primero el médico.
+\end{cuidado}
 \end{planta}
 
 \begin{planta}{Cola de caballo}{Equisetum \spp}{Tallos}
@@ -1115,9 +1147,9 @@ y penetrante, que es la mejor seña para reconocerla. Las flores son
 diminutas y verdes, sin pétalos, apretadas en grupitos a lo largo de
 espigas con hojas. Yuyo poco llamativo y muy conocido desde antiguo, sobre todo como
 antiparasitario: ya se usaban sus semillas machacadas y en cocimiento.
-La infusión de las hojas actúa contra el empacho y los asentamientos. Es
-digestivo, distiende el intestino, calma los cólicos y los calambres, y
-se lo usa para la parálisis de la lengua. Colgar ramos en una habitación
+La infusión de las hojas actúa contra el empacho y los asentamientos. Se lo
+usa como digestivo, para los gases, los cólicos y los calambres, y
+también para la parálisis de la lengua. Colgar ramos en una habitación
 ahuyenta pulgas y moscas.
 \begin{cuidado}[Abortivo, y tóxico en exceso]
 El paico es abortivo: está contraindicado en el embarazo. Su aceite
@@ -1130,15 +1162,11 @@ conozca bien, por períodos cortos.
 \end{cuidado}
 \end{planta}
 
-\lamina[0.82\textwidth]{img/15-lamina-cicatrizantes.jpg}{%
-  Llantén, cola de caballo y paico: la roseta, el tallo hueco y la
-  espiga dentada.}
-
 \begin{planta}{Liga o muérdago criollo}{Phoradendron liga}{Toda la planta}
 \phantomsection\label{pl-liga}%
 Planta hemiparásita: usa a los árboles como soporte para obtener agua y
-nutrientes minerales, pero fotosintetiza sus propios carbohidratos. Es
-un fuerte depurador de la sangre y se la usa como hipotensora. La
+nutrientes minerales, pero fotosintetiza sus propios carbohidratos. Se la
+tiene por un fuerte depurador de la sangre y se la usa como hipotensora. La
 tradición le atribuye efectos antitumorales, y por eso se la estudia. Se
 la emplea también cuando los hombres tienen problemas para orinar y para
 las durezas en los pechos de las mujeres.
@@ -1153,8 +1181,12 @@ oncológico.
 \end{cuidado}
 \end{planta}
 
-\lamina[0.86\textwidth]{img/18-liga-muerdago.jpg}{%
+\lamina[0.56\textwidth]{img/18-liga-muerdago.jpg}{%
   La liga instalada sobre su hospedante, con sus frutos translúcidos.}
+
+\lamina[0.6\textwidth]{img/15-lamina-cicatrizantes.jpg}{%
+  Llantén, cola de caballo y paico: la roseta, el tallo hueco y la
+  espiga dentada.}
 
 \cierre
 
@@ -1228,21 +1260,21 @@ que nada.
 \begin{multicols}{2}
 \small
 \begin{description}[leftmargin=0pt, style=nextline, font=\sffamily\bfseries\footnotesize\color{verdehuerta}, itemsep=0.35em]
-  \item[Acidez y digestión.] Arcayuyo\textdaggerdbl{}, atamisqui, cedrón, incayuyo, marrubio\textdaggerdbl{}, paico\textdagger{}, salvia mora\textdaggerdbl{}.
+  \item[Acidez y digestión.] Arcayuyo\textdaggerdbl{}, atamisqui, cedrón\textdaggerdbl{}, incayuyo, marrubio\textdaggerdbl{}, paico\textdagger{}, salvia mora\textdaggerdbl{}.
   \item[Alcoholismo.] Sombra de toro\textdaggerdbl{}, cepa caballo\textdagger{}.
-  \item[Ánimo, insomnio, nervios.] Arcayuyo\textdaggerdbl{}, cedrón, incayuyo, marrubio\textdaggerdbl{}.
-  \item[Cicatrización y heridas.] Cepa caballo\textdagger{}, cola de caballo\textdaggerdbl{}, llantén, molle, retama\textdagger{}.
-  \item[Dolor de muelas.] Jarilla\textdaggerdbl{}, molle.
-  \item[Empacho y parásitos.] Arcayuyo\textdaggerdbl{}, chilca, incayuyo, molle, paico\textdagger{}.
-  \item[Fiebre.] Cedrón, cepa caballo\textdagger{}, marrubio\textdaggerdbl{}.
-  \item[Garganta y vías respiratorias.] Algarrobo, chañar, chilca, incayuyo, jarilla\textdaggerdbl{}, llantén, marrubio\textdaggerdbl{}, molle, salvia mora\textdaggerdbl{}.
-  \item[Hígado.] Arcayuyo\textdaggerdbl{}, atamisqui, cepa caballo\textdagger{}, molle, retama\textdagger{}, sombra de toro\textdaggerdbl{}.
+  \item[Ánimo, insomnio, nervios.] Arcayuyo\textdaggerdbl{}, cedrón\textdaggerdbl{}, incayuyo, marrubio\textdaggerdbl{}.
+  \item[Cicatrización y heridas.] Cepa caballo\textdagger{}, cola de caballo\textdaggerdbl{}, llantén\textdaggerdbl{}, molle\textdaggerdbl{}, retama\textdagger{}.
+  \item[Dolor de muelas.] Jarilla\textdaggerdbl{}, molle\textdaggerdbl{}.
+  \item[Empacho y parásitos.] Arcayuyo\textdaggerdbl{}, chilca, incayuyo, molle\textdaggerdbl{}, paico\textdagger{}.
+  \item[Fiebre.] Cedrón\textdaggerdbl{}, cepa caballo\textdagger{}, marrubio\textdaggerdbl{}.
+  \item[Garganta y vías respiratorias.] Algarrobo, chañar, chilca, incayuyo, jarilla\textdaggerdbl{}, llantén\textdaggerdbl{}, marrubio\textdaggerdbl{}, molle\textdaggerdbl{}, salvia mora\textdaggerdbl{}.
+  \item[Hígado.] Arcayuyo\textdaggerdbl{}, atamisqui, cepa caballo\textdagger{}, molle\textdaggerdbl{}, retama\textdagger{}, sombra de toro\textdaggerdbl{}.
   \item[Huesos y ligamentos.] Atamisqui, cola de caballo\textdaggerdbl{}.
-  \item[Piel.] Arcayuyo\textdaggerdbl{}, cedrón, cepa caballo\textdagger{}, llantén, palán palán\textdagger{} (solo externo).
+  \item[Piel.] Arcayuyo\textdaggerdbl{}, cedrón\textdaggerdbl{}, cepa caballo\textdagger{}, llantén\textdaggerdbl{}, palán palán\textdagger{} (solo externo).
   \item[Presión y azúcar en sangre.] Arcayuyo\textdaggerdbl{}, liga\textdagger{}, marrubio\textdaggerdbl{}.
-  \item[Reuma y dolor muscular.] Atamisqui, cedrón, chilca, jarilla\textdaggerdbl{}, marrubio\textdaggerdbl{}, molle, sombra de toro\textdaggerdbl{}, tusca\textdaggerdbl{}.
-  \item[Riñón y vías urinarias.] Algarrobo, cepa caballo\textdagger{}, cola de caballo\textdaggerdbl{}, liga\textdagger{}, llantén, molle.
-  \item[Sangre (depurativas).] Cepa caballo\textdagger{}, cola de caballo\textdaggerdbl{}, liga\textdagger{}, molle, retama\textdagger{}, sombra de toro\textdaggerdbl{}.
+  \item[Reuma y dolor muscular.] Atamisqui, cedrón\textdaggerdbl{}, chilca, jarilla\textdaggerdbl{}, marrubio\textdaggerdbl{}, molle\textdaggerdbl{}, sombra de toro\textdaggerdbl{}, tusca\textdaggerdbl{}.
+  \item[Riñón y vías urinarias.] Algarrobo, cepa caballo\textdagger{}, cola de caballo\textdaggerdbl{}, liga\textdagger{}, llantén\textdaggerdbl{}, molle\textdaggerdbl{}.
+  \item[Sangre (depurativas).] Cepa caballo\textdagger{}, cola de caballo\textdaggerdbl{}, liga\textdagger{}, molle\textdaggerdbl{}, retama\textdagger{}, sombra de toro\textdaggerdbl{}.
 \end{description}
 \end{multicols}
 
@@ -1285,23 +1317,25 @@ de su ficha.
 
 \begin{multicols}{2}
 \small
-\begin{description}[leftmargin=0pt, style=nextline, font=\sffamily\bfseries\footnotesize\color{verdehuerta}, itemsep=0.35em]
+\begin{description}[leftmargin=0pt, style=nextline, font=\sffamily\bfseries\footnotesize\color{verdehuerta}, itemsep=0.1em, topsep=0pt]
   \item[Antiespasmódico.] Que calma los espasmos y los cólicos.
   \item[Antipirético o antitérmico.] Que baja la fiebre.
   \item[Asentamiento.] En el habla popular, malestar digestivo parecido al empacho.
   \item[Astringente.] Que contrae los tejidos y seca secreciones.
-  \item[Bebida plus.] Agua con gotas de tintura madre, preparada para
-  tomar a lo largo del día.
+  \item[Bebida plus.] Agua con gotas de tintura madre, para tomar en el día.
+  \item[Antiséptico.] Que impide que prosperen los microbios.
+  \item[Cardiotónico.] Que se atribuye fortalecer el corazón.
   \item[Carminativo.] Que ayuda a expulsar los gases.
   \item[Cataplasma.] Planta machacada aplicada sobre la piel.
   \item[Cocimiento o decocción.] Hervor sostenido de cortezas, raíces o semillas.
   \item[Colagogo.] Que favorece la salida de la bilis.
   \item[Depurativo.] Que la tradición asocia a «limpiar la sangre».
   \item[Diurético.] Que aumenta la cantidad de orina.
-  \item[Emenagogo.] Que estimula el flujo menstrual. Por eso mismo, varias de estas plantas están contraindicadas en el embarazo.
-  \item[Empacho.] En la medicina popular, indigestión que se atribuye a
-  comida que queda «pegada» en el estómago o el intestino.
+  \item[Emenagogo.] Que estimula el flujo menstrual; por eso no se usa en el embarazo.
+  \item[Empacho.] Indigestión que se atribuye a comida «pegada» en el
+  estómago o el intestino.
   \item[Emplasto.] Cataplasma sostenida con un paño.
+  \item[Enuresis.] Pérdida involuntaria de orina, sobre todo nocturna.
   \item[Expectorante.] Que ayuda a aflojar y expulsar la flema.
   \item[Faras.] Heridas agusanadas de los animales.
   \item[Hemiparásita.] Planta que toma agua y minerales de otra, pero fotosintetiza.
