@@ -1,0 +1,28 @@
+{
+  "pliego": 4,
+  "contenido": 9,
+  "contenido_obs": "Fiel en las 21 fichas y con voz propia, pero omite sin decirlo la sección «Fitoterapia» del cuadernillo y varios usos (cepa caballo, incayuyo, molle). Paico, marrubio y salvia mora sin descripción suficiente para reconocerlas.",
+  "rigor_botanico": 5,
+  "rigor_botanico_obs": "Nomenclatura actualizada y en general correcta (tusca, algarrobo corregidos respecto del cuadernillo), pero sin fuente citada ni aviso de los cambios; salvia mora sin aclarar; muchas propiedades afirmadas como hechos (molle, cola de caballo, algarrobo).",
+  "seguridad_sanitaria": 3,
+  "seguridad_sanitaria_obs": "Jarilla con uso interno y sin advertencia; salvia mora emenagoga sin advertencia de embarazo; tusca/sífilis sin la aclaración que promete la nota de lectura; índice de dolencias con † parcial.",
+  "redaccion": 6,
+  "redaccion_obs": "Prosa cuidada y cercana; enumeraciones largas (molle, cepa caballo), cambios de género (cepa caballo: «la usa… se lo usa»), citas del cuadernillo casi nunca distinguidas.",
+  "ortotipografia": 4,
+  "ortotipografia_obs": "«spp.» y «sin.» en cursiva en fichas e índice pero redondos en epígrafes; «y especies afines» en cursiva; Datura sin cursiva (p. 37); unidades en letra y en símbolo mezcladas.",
+  "ilustraciones": 2,
+  "ilustraciones_obs": "Lámina 15 (p. 33) no muestra llantén, cola de caballo ni paico. Estilos mezclados (con y sin marco, paisajes insertos), arbusto repetido en láminas 13 y 16, flor labiada en el arcayuyo.",
+  "maquetacion": 4,
+  "maquetacion_obs": "Blancos grandes en pp. 13, 17 y 21; cajas de advertencia cortadas con una línea sola (pp. 20, 24) o separadas de su ficha por una lámina (pp. 30, 34); cubierta y contratapa dentro del PDF interior.",
+  "aparato": 2,
+  "aparato_obs": "Bibliografía con dos entradas sin año ni lugar; colofón sin datos de impresión; contratapa sin texto de presentación; índice de dolencias con errores (tusca en garganta); glosario sin varios términos usados.",
+  "preimpresion": 0,
+  "preimpresion_obs": "Sin cubierta aparte ni lomo, imágenes en RGB, texto en gris RGB (2B2B28) y no 100 % K, sin especificaciones de imprenta.",
+  "derechos": 2,
+  "derechos_obs": "Permiso de reproducción sin licencia nombrada; sin ISBN ni leyenda de la Ley 11.723; consentimientos de los vecinos y origen de las láminas sin documentar.",
+  "holistica": 66,
+  "holistica_justificacion": "Ver EVALUA-informe.md, sección 6.",
+  "excluyentes": [
+    {"condicion": 4, "caso": "p. 33 (lámina 15-lamina-cicatrizantes.jpg): el epígrafe dice «Llantén, cola de caballo y paico», pero la lámina muestra una leguminosa con vainas, una rama espinosa con espigas amarillas tipo Prosopis y un arbusto de flores amarillas; ninguna de las tres especies de las fichas."}
+  ]
+}

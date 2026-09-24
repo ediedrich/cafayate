@@ -13,6 +13,15 @@
 
 \documentclass[11pt,twoside,openright]{book}
 
+% ------------------------- Modo de salida ----------------------------
+% \imprentatrue  : interior para imprenta. Sin cubierta ni contratapa
+%                  (van en cubierta.tex, con lomo y demasía), colores
+%                  convertidos a CMYK y texto en negro 100 % K.
+% \imprentafalse : PDF de lectura en pantalla, con cubierta y
+%                  contratapa incluidas.
+\newif\ifimprenta
+\imprentatrue
+
 % ------------------------- Idioma y tipografía -----------------------
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
@@ -32,7 +41,13 @@
 \usepackage{graphicx}
 \usepackage{array}
 \newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
-\usepackage{xcolor}
+\ifimprenta
+  \usepackage[cmyk]{xcolor}
+\else
+  \usepackage{xcolor}
+\fi
+\usepackage{afterpage}
+\usepackage{needspace}
 \usepackage[a4paper]{geometry}
 \usepackage{titlesec}
 \usepackage{fancyhdr}
@@ -61,7 +76,11 @@
 \definecolor{terracota}  {HTML}{9C3F22}
 \definecolor{ocre}       {HTML}{C28A34}
 \definecolor{crema}      {HTML}{FBF4E6}
-\definecolor{tinta}      {HTML}{2B2B28}
+\ifimprenta
+  \definecolor{tinta}{cmyk}{0,0,0,1}  % negro 100 % K para imprenta
+\else
+  \definecolor{tinta}{HTML}{2B2B28}
+\fi
 \definecolor{gris}       {HTML}{7A7A72}
 
 \color{tinta}
@@ -150,8 +169,10 @@
 }
 
 % Advertencia / precaución
+% No se parte: una advertencia cortada deja una línea sola en la página
+% siguiente y se lee como si fuera otra cosa.
 \newtcolorbox{cuidado}[1][Atención]{
-  enhanced, breakable,
+  enhanced,
   colback=white, colframe=terracota,
   boxrule=0.8pt, arc=0pt,
   left=1.1em, right=1.1em, top=0.8em, bottom=0.8em,
@@ -163,8 +184,10 @@
 
 % --------------------------- Fichas de herbario ----------------------
 % \begin{planta}{Nombre común}{Nombre científico}{Parte que se usa}
+% El \needspace evita que el nombre de la planta quede solo al pie de
+% una página, separado de su texto.
 \newenvironment{planta}[3]{%
-  \par\vspace{1.4em}\noindent
+  \par\needspace{8\baselineskip}\vspace{1.4em}\noindent
   {\sffamily\bfseries\large\color{verdehuerta}#1}\quad
   {\itshape\small\color{gris}#2}\par
   \vspace{0.15em}
@@ -175,6 +198,15 @@
 }{\par\vspace{0.4em}}
 
 % ------------------------------- Utilidades --------------------------
+% Nomenclatura: «spp.», «sin.» y los paréntesis van en redonda aunque
+% el nombre científico esté en cursiva.
+\newcommand{\spp}{\textup{spp.}}
+\newcommand{\sinon}[1]{\textup{(sin.~}#1\textup{)}}
+
+% Dato que todavía falta confirmar. Se imprime resaltado a propósito,
+% para que no llegue a imprenta sin que nadie lo vea.
+\newcommand{\pendiente}[1]{{\setlength{\fboxsep}{1.5pt}\colorbox{yellow}{\color{black}\sffamily\footnotesize #1}}}
+
 % Imagen a caja completa con epígrafe
 \newcommand{\lamina}[3][\textwidth]{%
   \begin{figure}[htbp]\centering
@@ -196,15 +228,32 @@
   \end{center}
   \vspace*{\fill}\clearpage}
 
+% La misma lámina, pero diferida a la página siguiente a la que se está
+% componiendo: el texto llena la página actual y no quedan blancos.
+\newcommand{\laminadiferida}[2]{\afterpage{\laminapagina{#1}{#2}}}
+
 % Parte con lámina: la página de la parte va en impar y la ilustración
 % ocupa el verso siguiente (en lugar de la página en blanco automática).
 \makeatletter
-\newcommand{\parteconlamina}[3]{%
+% #1 título para el índice, #2 título en la página de parte (puede
+% llevar \\ para cortar la línea donde corresponde).
+\newcommand{\parteconlamina}[4]{%
   \cleardoublepage
   \@openrightfalse
-  \part{#1}%
+  \part[#1]{#2}%
   \@openrighttrue
-  \laminapagina{#2}{#3}}
+  \laminapagina{#3}{#4}}
+
+% Páginas por pliego que arma la imprenta (4 o 16; mismo valor que la
+% clave «pliego» de evalua.json). En modo imprenta se agregan páginas en
+% blanco al final hasta completar el último pliego.
+\newcommand{\pliego}{4}
+\newcommand{\completarpliego}{%
+  \clearpage
+  \loop\ifnum\numexpr\ReadonlyShipoutCounter-(\ReadonlyShipoutCounter/\pliego)*\pliego\relax=0
+    \else
+    \hbox{}\thispagestyle{empty}\newpage
+  \repeat}
 
 % Salto a página par (verso): para la contratapa, que debe ser la última
 % cara del libro.
@@ -269,6 +318,7 @@
 % =====================================================================
 %  CUBIERTA
 % =====================================================================
+\ifimprenta\else
 \begin{titlepage}
 \thispagestyle{empty}
 \AddToShipoutPictureBG*{%
@@ -277,9 +327,12 @@
   \fill[verdehuerta, opacity=0.74, path fading=south]
         (current page.north west) rectangle
         ([yshift=-10.6cm]current page.north east);
-  \fill[verdehuerta, opacity=0.85, path fading=north]
+  \fill[verdehuerta, opacity=0.88]
         (current page.south west) rectangle
-        ([yshift=4.6cm]current page.south east);
+        ([yshift=3.4cm]current page.south east);
+  \fill[verdehuerta, opacity=0.88, path fading=north]
+        ([yshift=3.4cm]current page.south west) rectangle
+        ([yshift=6.0cm]current page.south east);
   \node[anchor=north, inner sep=0pt] at ([yshift=-2.0cm]current page.north)
     {\begin{minipage}{0.82\paperwidth}
        \centering
@@ -292,12 +345,13 @@
   \node[anchor=south, inner sep=0pt] at ([yshift=1.5cm]current page.south)
     {\begin{minipage}{0.82\paperwidth}
        \centering
-       {\sffamily\fontsize{8.5}{11}\selectfont\color{crema}
+       {\sffamily\bfseries\fontsize{9}{12}\selectfont\color{crema}
         LA BOTICA COMPLETA, A UN KILÓMETRO A LA REDONDA\\[0.3em]
         VALLES CALCHAQUÍES · SALTA}
      \end{minipage}};
 \end{tikzpicture}
 \end{titlepage}
+\fi
 
 \frontmatter
 \pagestyle{empty}
@@ -344,6 +398,10 @@ Diseño y composición tipográfica: Eduardo Diedrich.\par
 Se permite y se agradece la reproducción total o parcial de esta obra
 con fines educativos y comunitarios, citando la fuente. El monte, como
 el conocimiento, se cuida compartiéndolo.\par
+\pendiente{Licencia: a definir con la autora (p.~ej., CC BY-NC-SA 4.0).}\par
+\vspace{0.9em}
+ISBN: \pendiente{en trámite}\par
+Queda hecho el depósito que marca la Ley 11.723.\par
 \vspace{0.9em}
 Impreso en Argentina.\par
 }
@@ -363,7 +421,7 @@ Impreso en Argentina.\par
 
 % --- Nota de lectura ---
 \cleardoublepage
-\null\vspace*{3.4cm}
+\null\vspace*{1.2cm}
 \begin{center}
   {\sffamily\bfseries\color{verdehuerta} NOTA DE LECTURA}\\[0.4em]
   {\color{verdehoja}\rule{4cm}{0.8pt}}
@@ -403,6 +461,19 @@ las traiga.
 En embarazo, lactancia, infancia, enfermedades crónicas o junto con
 medicación, cualquier planta debe consultarse con un profesional de la
 salud.
+
+\vspace{0.7em}
+\noindent\small
+\textbf{Sobre esta edición.} El libro reúne las veintiuna plantas que el
+cuadernillo describe en fichas. No incluye la sección «Fitoterapia» del
+cuadernillo, un listado de usos en tintura de más de cincuenta plantas,
+muchas de ellas cultivadas o ajenas al monte quebradeño. Tampoco
+transcribe los usos que el cuadernillo atribuye a algunas plantas contra
+enfermedades que requieren atención médica —como las cataratas o la
+gonorrea—, ni aplicaciones en los ojos. Los nombres científicos se
+actualizaron según la Flora Argentina y POWO; donde el cuadernillo usaba
+otro nombre, se corrigió (por ejemplo, la tusca es \textit{Vachellia
+aroma} y no \textit{Acacia farnesiana}).
 
 \vspace{0.7em}
 \noindent\small
@@ -468,6 +539,7 @@ nuestra madre va a tener que cerrar la botica.
 % =====================================================================
 \mainmatter
 \parteconlamina{La botica a un kilómetro a la redonda}
+  {La botica\\ a un kilómetro a la redonda}
   {img/03-parte1-apertura.jpg}{%
   La Quebrada de Cafayate al amanecer. Entre los cerros colorados y el
   cauce seco crece una farmacia entera.}
@@ -492,7 +564,7 @@ usamos.
 
 \section{Por qué lo cercano}
 
-La idea del kilómetro a la redonda no es sólo una metáfora romántica.
+La idea del kilómetro a la redonda no es solo una metáfora romántica.
 Las plantas que prosperan en un sitio son las que el clima, la altura y
 la humedad seleccionaron ahí, y son las que la gente del lugar tuvo
 siempre a mano para probar, observar y recordar. La tradición agrega una
@@ -645,7 +717,7 @@ indicación de un profesional.
   agitándolo antes de cada toma («activándolo», dice el cuadernillo).
   \item[Duración.] El tratamiento se sostiene durante un mes y se
   descansa una semana antes de retomar.
-  \item[Microdosis.] En un frasco gotero de 30\,ml lleno de un vehículo
+  \item[Microdosis.] En un frasco gotero de 30 mililitros lleno de un vehículo
   de 30\,\% de alcohol y 70\,\% de agua, 60 gotas de tintura madre. Se
   toman 7 gotas, cuatro veces al día.
 \end{description}
@@ -660,6 +732,7 @@ contienen sustancias tóxicas y no sirven para nada que vaya al cuerpo.
 
 % =====================================================================
 \parteconlamina{Las plantas de la quebrada}
+  {Las plantas de la quebrada}
   {img/08-parte2-apertura.jpg}{%
   El monte quebradeño: algarrobos, chañares, jarillas y tuscas sobre
   suelo arenoso.}
@@ -673,11 +746,11 @@ hacen de árbol— son pocos y valen por muchos.
 Dan sombra, comida, leña, madera, tintura y remedio, y varias
 generaciones organizaron su año alrededor de cuándo florece cada uno.
 
-\laminapagina{img/09-algarrobo.jpg}{%
+\laminadiferida{img/09-algarrobo.jpg}{%
   Algarrobo (\textit{Prosopis} spp.): porte, flor en racimo, vaina
   madura y detalle de la resina del tronco.}
 
-\begin{planta}{Algarrobo}{Prosopis spp.}{Fruto, flor, corteza, hojas y resina}
+\begin{planta}{Algarrobo}{Prosopis \spp}{Fruto, flor, corteza, hojas y resina}
 \phantomsection\label{pl-algarrobo}%
 Árbol de grandes dimensiones, tronco leñoso, hojas compuestas ovaladas
 y pequeñas, flores en racimo de color blanquecino que en primavera
@@ -690,8 +763,8 @@ Del fruto —la algarroba— se obtienen harina, arrope, un sucedáneo del
 café y una bebida. Es rico en calcio, fósforo, proteínas y vitaminas del
 grupo B. La tradición sostiene que masticar el fruto y escupir la
 semilla fortalece el pelo, y que aspirar el humo de los frutos quemados
-alivia el asma. El consumo del fruto funciona como laxante suave. La
-infusión de la flor es diurética; la corteza, antidiarreica. Con los
+alivia el asma. El consumo del fruto se usa como laxante suave, la
+infusión de la flor como diurética y la corteza como antidiarreica. Con los
 frutos del algarrobo negro se preparan lavados para infecciones
 oculares, y la infusión de hojas del algarrobo blanco se usa para los
 cálculos de vejiga. El tronco llora una resina oscura que sirve de
@@ -710,7 +783,7 @@ azúcar quemada con una brasa, que le quita el amargor. El arrope, el
 dulce que resulta de la cocción del fruto, también alivia la garganta.
 \end{planta}
 
-\laminapagina{img/10-chanar.jpg}{%
+\laminadiferida{img/10-chanar.jpg}{%
   Chañar (\textit{Geoffroea decorticans}): corteza descascarada,
   floración amarilla y fruto maduro.}
 
@@ -719,20 +792,22 @@ dulce que resulta de la cocción del fruto, también alivia la garganta.
 Árbol grande y ramificado, de cinco a siete metros, tronco rugoso y
 nudoso, copa amplia y hojas compuestas. Da un fruto rojo púrpura que al
 aplastarse despide un aroma dulce a pimienta, de ahí su nombre de falsa
-pimienta. Los antiguos lo llamaban «sanalotodo». Su propiedad más
-destacada es la antirreumática: la tintura, maceración de hojas en
-alcohol, se usa en fricciones, igual que las hojas y flores en
-cataplasma caliente sobre dolores musculares. Es además depurativo de la
-sangre, antiparasitario, cicatrizante, hemostático, antiespasmódico;
-alivia el dolor de cabeza, de garganta y de muelas, y los malestares de
-riñones, hígado y vejiga.
+pimienta. Los antiguos lo llamaban «sanalotodo». La tradición destaca sobre todo
+su uso antirreumático: la tintura, maceración de hojas en alcohol, se
+usa en fricciones, igual que las hojas y flores en cataplasma caliente
+sobre dolores musculares. Se lo usa además como depurativo de la
+sangre, antiparasitario, cicatrizante, hemostático y antiespasmódico;
+se le atribuye aliviar el dolor de cabeza, de garganta y de muelas, y
+los malestares de riñones, hígado y vejiga. Con la cáscara del fruto
+machacada y dejada en agua se hace una bebida a la que se atribuye
+ayudar a adelgazar.
 \end{planta}
 
-\laminapagina{img/11-molle.jpg}{%
+\laminadiferida{img/11-molle.jpg}{%
   Molle (\textit{Schinus molle}): hoja compuesta y racimo de frutos
   rosados, la «falsa pimienta».}
 
-\begin{planta}{Tusca}{Vachellia aroma (sin. Acacia aroma)}{Corteza y hojas}
+\begin{planta}{Tusca}{Vachellia aroma \sinon{Acacia aroma}}{Corteza y hojas}
 \phantomsection\label{pl-tusca}%
 Árbol espinoso de tres a cuatro metros, de flores redonditas, amarillas
 y muy perfumadas, que inundan el monte durante la floración. La corteza
@@ -740,6 +815,12 @@ en decocción es un desinfectante fuerte, muy usado por las mujeres en
 baños de asiento para tratar el flujo excesivo o anormal. La decocción
 de las hojas se usó tradicionalmente contra la sífilis, y la infusión de
 las mismas hojas alivia los dolores musculares.
+\begin{cuidado}[La sífilis necesita antibióticos]
+No existe evidencia clínica de que la tusca cure la sífilis. Es una
+infección grave, que hoy se cura con antibióticos y que, sin
+tratamiento, daña el corazón, los nervios y al bebé durante el embarazo.
+Ante la sospecha, consultar.
+\end{cuidado}
 \end{planta}
 
 \begin{planta}{Atamisqui}{Atamisquea emarginata}{Ramas y hojas}
@@ -794,12 +875,14 @@ aromáticas, cargadas de resina. Casi todas trabajan sobre el mismo
 terreno —el dolor muscular, el reuma, la circulación— y casi todas se
 usan más por fuera que por dentro.
 
-\laminapagina{img/12-jarilla.jpg}{%
-  Jarilla (\textit{Larrea} spp.): tallos plateados, hoja pequeña
+\laminadiferida{img/12-jarilla.jpg}{%
+  Jarilla (\textit{Larrea} \spp): tallos plateados, hoja pequeña
   resinosa y flor amarilla.}
 
-\begin{planta}{Jarilla}{Larrea cuneifolia y especies afines}{Hojas y ramas}
+\begin{planta}{Jarilla}{Larrea \spp}{Hojas y ramas}
 \phantomsection\label{pl-jarilla}%
+En la quebrada se llama jarilla a varias especies de \textit{Larrea},
+sobre todo a \textit{Larrea cuneifolia}, y se las usa del mismo modo.
 Arbusto que llega a los dos metros, de tallos plateados y hojas
 pequeñas, verde intenso, muy aromáticas por la resina que las cubre. La
 decocción se usa en baños para tratar el reumatismo y para la
@@ -809,6 +892,14 @@ Para el dolor de muelas se hace un emplasto con las hojas: se envuelve
 un terrón de sal y se lo coloca sobre la caries. Para cortar la tos
 rebelde se recomienda la infusión, y macerada en aceite sirve para
 friccionar los dolores musculares.
+\begin{cuidado}[Por dentro, poco y de a ratos]
+La resina de la jarilla contiene ácido nordihidroguayarético, y el
+consumo sostenido de especies de \textit{Larrea} se asoció con daño en
+el hígado y en el riñón. Su uso más seguro es el externo, en baños y
+fricciones. La infusión, si se toma, que sea ocasional y por pocos días;
+nunca en embarazo, lactancia, infancia ni con enfermedad del hígado o
+del riñón.
+\end{cuidado}
 \end{planta}
 
 \begin{planta}{Chilca}{Baccharis salicifolia}{Hojas}
@@ -817,7 +908,7 @@ Arbusto que se multiplica densamente en el monte quebradeño, de varas
 largas y rectas color tostado claro y hojas lanceoladas verde brillante,
 pringosas y de perfume dulce. Al ser muy resinosa levanta la temperatura
 corporal, y por eso se usa en cataplasma para reumatismo, luxaciones y
-dolores musculares; activa la circulación. En infusión es un efectivo
+dolores musculares; activa la circulación. En infusión se usa como
 antiparasitario, y de la misma forma se usa para el dolor de garganta,
 la tos y la bronquitis. La parte usada es siempre la hoja. El
 cuadernillo menciona además estudios realizados en México que señalan a
@@ -832,7 +923,7 @@ naturalizada en banquinas y taludes. Las flores se usan en cataplasma
 para madurar abscesos y desinfectar heridas. La tradición les atribuye,
 en infusión, acción diurética y depurativa, y el cocimiento se usó en
 afecciones hepáticas.
-\begin{cuidado}[Tóxica: sólo uso externo en casa]
+\begin{cuidado}[Tóxica: solo uso externo en casa]
 La retama contiene alcaloides —citisina y afines— que la vuelven tóxica
 por vía interna, con náuseas, vómitos, trastornos del ritmo cardíaco y
 de la respiración. Por eso este libro no transcribe las dosis del
@@ -845,12 +936,13 @@ flores machacadas sobre el absceso, sin tragar nada.
 \phantomsection\label{pl-cepa}%
 Hierba anual espinosa, de unos cincuenta centímetros, que se comporta
 como un arbusto chico. La tradición la usa en infusión como diurético, para tratar la cistitis y aliviar la inflamación del riñón;
-externamente, en cocimiento, como astringente de la piel. Se lo usa en
-trastornos hepáticos, renales y reumáticos, y como depurador de la
+externamente, en cocimiento, como astringente de la piel. Se la usa en
+trastornos hepáticos, renales y reumáticos, y como depuradora de la
 sangre. La raíz en decocción se usa como laxante suave y descongestionante
 del hígado, y la tradición le atribuye lograr repugnancia a las bebidas
-alcohólicas. También se lo emplea como antiséptico para lavado de
-heridas y como antipirético.
+alcohólicas. También se la emplea como antiséptico para lavado de
+heridas y como antipirética, y el cuadernillo la menciona contra la
+presión alta, la diarrea, la gripe, los resfríos y el sobrepeso.
 \begin{cuidado}[Tóxica: no para uso interno casero]
 Las semillas y las plantitas recién nacidas contienen
 carboxiatractilósido, un compuesto que daña el hígado y que causa
@@ -874,11 +966,12 @@ infancia.
 pava, a la infusión de después de comer, y trabajan casi siempre sobre
 los dos mismos territorios: la digestión y el ánimo.
 
-\begin{planta}{Cedrón}{Aloysia citriodora (sin. Lippia citriodora)}{Hojas}
+\begin{planta}{Cedrón}{Aloysia citrodora \sinon{Lippia citriodora}}{Hojas}
 \phantomsection\label{pl-cedron}%
 Planta muy perfumada, de aroma a limón, de alrededor de un metro de
-altura, con hojas pequeñas y lanceoladas de color verde claro. En
-infusión es tónico estomacal, sedante y carminativo. Se lo usa como
+altura, con hojas pequeñas y lanceoladas de color verde claro, dispuestas
+de a tres o cuatro alrededor del tallo. En infusión se usa como tónico
+estomacal, sedante y carminativo. Se lo usa como
 antidepresivo suave; alivia jaquecas y fiebres, y se lo recomienda para
 el insomnio y los estados de ansiedad. Se le atribuyen propiedades
 cardiotónicas, con buen resultado sobre las palpitaciones. En
@@ -899,7 +992,7 @@ menor y encantadora: una ramita detrás de la oreja alivia el dolor de
 cabeza cuando es de un solo lado.
 \end{planta}
 
-\begin{planta}{Arcayuyo}{Dysphania graveolens (sin. Chenopodium graveolens)}{Hojas e inflorescencias}
+\begin{planta}{Arcayuyo}{Dysphania graveolens \sinon{Chenopodium graveolens}}{Hojas e inflorescencias}
 \phantomsection\label{pl-arcayuyo}%
 Hierba aromática de hasta un metro que crece en lugares húmedos y de altura, de
 hojas lanceoladas y dentadas, verde claro, con inflorescencias
@@ -909,23 +1002,36 @@ acumulación de bilis. En cocimiento y de forma externa se aplica para
 remover asperezas de la piel y tratar inflamaciones, eczemas,
 sarpullidos y erupciones. Sirve también para el empacho, y contra los
 trastornos nerviosos: una infusión al dormir es muy recomendable para
-quienes padecen insomnio. Se lo usa para la hipertensión —quien ya toma
-medicación para la presión debe consultar antes—, y se dice que
+quienes padecen insomnio. Se lo usa para la hipertensión, y se dice que
 mojando las zonas con un cocimiento todas las noches van desapareciendo
 pecas y manchas. Es de sabor dulce, parecido a la miel, y buen compañero
 del mate.
+\begin{cuidado}[Si hay medicación para la presión, consultar]
+Una planta que se usa para bajar la presión puede sumarse al efecto de
+la medicación. Quien ya toma remedios para la presión debe consultar
+antes de usarla.
+\end{cuidado}
 \end{planta}
 
 \begin{planta}{Salvia mora}{Lippia alba}{Hojas y flores}
 \phantomsection\label{pl-salvia}%
-Arbusto de hojas pequeñas y flores lilas. La infusión de hojas y flores
-es un excelente digestivo, y como antiespasmódico da muy buenos
-resultados. En forma tópica se usa para las hemorroides: se amortigua la
+Arbusto de ramas largas y arqueadas, que a veces se apoyan en el suelo o
+en otras plantas; hojas opuestas, ovaladas, rugosas y de borde aserrado,
+muy aromáticas al estrujarlas; flores pequeñas y lilas, reunidas en
+cabezuelas que nacen de la axila de las hojas. El nombre de salvia se
+usa también para especies del género \textit{Salvia}, de flor azul, que
+son otras plantas: conviene confirmar cuál se tiene antes de usarla.
+La tradición la considera un excelente digestivo, y como
+antiespasmódico dice que da muy buenos resultados. En forma tópica se usa para las hemorroides: se amortigua la
 hoja con la mano y se coloca. En infusión es sudorífica y emenagoga, y
 es un excelente descongestivo de las vías respiratorias: tos, faringitis,
-laringitis. Calma el dolor y cicatriza la garganta de manera casi
-inmediata. El tratamiento debe continuarse al menos tres o cuatro días,
-con infusiones tres veces por día.
+laringitis: se le atribuye calmar el dolor y cicatrizar la garganta de
+manera casi inmediata. El tratamiento debe continuarse al menos tres o
+cuatro días, con infusiones tres veces por día.
+\begin{cuidado}[No en el embarazo]
+Por ser emenagoga, es decir, por estimular el flujo menstrual, la salvia
+mora no se usa durante el embarazo.
+\end{cuidado}
 \end{planta}
 
 \lamina[0.82\textwidth]{img/13-lamina-aromaticas.jpg}{%
@@ -933,7 +1039,11 @@ con infusiones tres veces por día.
 
 \begin{planta}{Marrubio}{Marrubium vulgare}{Hojas y semillas}
 \phantomsection\label{pl-marrubio}%
-Planta austera, también llamada «panza de sapo» por su textura. Se usa
+Planta austera, también llamada «panza de sapo» por su textura. Es una
+hierba de tallos cuadrados cubiertos de pelos blancos, con hojas opuestas,
+redondeadas, arrugadas y de borde festoneado, de color verde grisáceo, y
+flores blancas diminutas en anillos apretados alrededor del tallo, con
+un cáliz de dientes ganchudos que se prende a la ropa. Se usa
 en infusión para las afecciones respiratorias y como expectorante.
 Controla la acidez estomacal, y en caso de fiebre se la usa como
 antitérmica. Ayuda a la digestión y se la emplea para tratar afecciones
@@ -942,9 +1052,10 @@ disminuir los niveles de azúcar en la sangre, por lo que está
 recomendada para quienes tratan esa dolencia. Las hojas y semillas
 machacadas, en forma de pomada, se usaron para el bocio, y en baños y
 fomentos para los dolores de espalda.
-\begin{cuidado}[Si hay medicación para la diabetes, consultar]
+\begin{cuidado}[Diabetes y embarazo]
 Una planta que baja el azúcar en sangre puede sumarse al efecto de la
-medicación y producir hipoglucemia. No se combina sin control médico.
+medicación y producir hipoglucemia: no se combina sin control médico.
+Tampoco se usa durante el embarazo.
 \end{cuidado}
 \end{planta}
 
@@ -962,9 +1073,10 @@ medicación y producir hipoglucemia. No se combina sin control médico.
 Hierba que se abre en roseta, de hojas lanceoladas y ovales con
 nervaduras marcadas y flores en espigas. Como cataplasma sirve para
 quemaduras y úlceras. Las infusiones se usan para limpiar riñones,
-intestino y vejiga, y alivian los dolores de garganta; sus propiedades
-antibacterianas, descongestionantes y expectorantes se aplican a tos,
-bronquitis, laringitis y faringitis. El jarabe se prepara machacando las
+intestino y vejiga, y para los dolores de garganta; a la planta, usada
+en tos,
+bronquitis, laringitis y faringitis, se le atribuyen propiedades
+antibacterianas, descongestionantes y expectorantes. El jarabe se prepara machacando las
 hojas, filtrando el líquido y disolviéndolo con azúcar a baño maría
 —con poco calor, porque el calor fuerte destruye las propiedades—; un
 par de cucharaditas al día disminuyen el dolor de las úlceras de
@@ -977,17 +1089,17 @@ hubo un golpe fuerte, porque el tímpano puede estar perforado. Se puede comer e
 vitaminas A, B1, C y calcio.
 \end{planta}
 
-\begin{planta}{Cola de caballo}{Equisetum spp.}{Tallos}
+\begin{planta}{Cola de caballo}{Equisetum \spp}{Tallos}
 \phantomsection\label{pl-cola}%
 Planta de tallos largos y huecos, sin hojas ni flores, con ramitas
 secundarias que nacen de los nudos; crece cerca de los arroyos. Tiene
 propiedades cicatrizantes y astringentes, y es buena para limpiar
 heridas. Se la usa para la enuresis. Es rica en sales minerales como
-silicio y potasio, y contiene saponinas, flavonoides y alcaloides. Es
-buen diurético y depurador de la sangre. Su riqueza en sílice explica
-el uso tradicional para la reconstitución de los ligamentos: es útil para
-deportistas que someten sus tendones a grandes exigencias, y remineraliza
-los huesos. Para la infusión se hierve el agua y, al retirarla, se
+silicio y potasio, y contiene saponinas, flavonoides y alcaloides. Se
+usa como diurético y depurador de la sangre. Su riqueza en sílice está
+detrás del uso tradicional para la reconstitución de los ligamentos: la
+tradición la recomienda a deportistas que someten sus tendones a grandes
+exigencias, y le atribuye remineralizar los huesos. Para la infusión se hierve el agua y, al retirarla, se
 agregan 20 gramos por litro o una cucharada por taza.
 \begin{cuidado}[Tiempo limitado, y no en embarazo]
 Hay que prescindir de esta hierba durante el embarazo y la lactancia, y
@@ -996,9 +1108,14 @@ irritar el tracto intestinal.
 \end{cuidado}
 \end{planta}
 
-\begin{planta}{Paico}{Dysphania ambrosioides (sin. Chenopodium ambrosioides)}{Hojas}
+\begin{planta}{Paico}{Dysphania ambrosioides \sinon{Chenopodium ambrosioides}}{Hojas}
 \phantomsection\label{pl-paico}%
-Yuyo poco llamativo y muy conocido desde antiguo, sobre todo como
+Hierba erguida y ramificada, de medio metro a un metro, verde
+amarillenta, de hojas lanceoladas con el borde irregularmente dentado y
+salpicadas de puntitos glandulares. Al estrujarla despide un olor fuerte
+y penetrante, que es la mejor seña para reconocerla. Las flores son
+diminutas y verdes, sin pétalos, apretadas en grupitos a lo largo de
+espigas con hojas. Yuyo poco llamativo y muy conocido desde antiguo, sobre todo como
 antiparasitario: ya se usaban sus semillas machacadas y en cocimiento.
 La infusión de las hojas actúa contra el empacho y los asentamientos. Es
 digestivo, distiende el intestino, calma los cólicos y los calambres, y
@@ -1010,7 +1127,7 @@ esencial concentra un compuesto —el ascaridol— muy tóxico, que también
 está presente en la hoja, y las intoxicaciones por paico ocurren sobre
 todo en chicos, justamente por su uso contra los parásitos. Por eso este
 libro no transcribe las dosis del cuadernillo: en infancia, embarazo o
-lactancia no se usa, y en adultos, sólo con guía de alguien que la
+lactancia no se usa, y en adultos, solo con guía de alguien que la
 conozca bien, por períodos cortos.
 \end{cuidado}
 \end{planta}
@@ -1027,8 +1144,8 @@ un fuerte depurador de la sangre y se la usa como hipotensora. La
 tradición le atribuye efectos antitumorales, y por eso se la estudia. Se
 la emplea también cuando los hombres tienen problemas para orinar y para
 las durezas en los pechos de las mujeres.
-\begin{cuidado}[Sólo bajo supervisión, y sin promesas]
-El propio cuadernillo lo advierte: esta planta sólo debe ingerirse bajo
+\begin{cuidado}[Solo bajo supervisión, y sin promesas]
+El propio cuadernillo lo advierte: esta planta solo debe ingerirse bajo
 supervisión de una persona calificada. Y hay que decirlo con claridad:
 no existe evidencia clínica que respalde el uso de la liga para tratar
 el cáncer. Ninguna planta de este libro reemplaza un tratamiento
@@ -1052,7 +1169,7 @@ tiene que poder identificarlas. No hay acá ninguna preparación, ninguna
 dosis y ninguna indicación: para estas dos, la información útil es
 exactamente dónde no meter la mano.
 
-\laminapagina{img/19-lamina-toxicas.jpg}{%
+\laminadiferida{img/19-lamina-toxicas.jpg}{%
   Chamico y palán palán. Las dos se reconocen fácil una vez que se las
   vio: conviene mirarlas con atención y no volver a tocarlas.}
 
@@ -1065,7 +1182,7 @@ también llamada hioscina— que la medicina aisló y usa bajo control
 estricto.
 \begin{cuidado}[Veneno: ni infusión, ni cocimiento, ni humo]
 Por su alto contenido de alcaloides, el chamico no puede consumirse de
-ninguna forma casera. Las intoxicaciones por Datura son frecuentes,
+ninguna forma casera. Las intoxicaciones por \textit{Datura} son frecuentes,
 graves y pueden ser mortales, y la diferencia entre una dosis que
 produce efecto y una que mata es mínima e impredecible de planta a
 planta. Se la reconoce por sus frutos espinosos y sus hojas dentadas
@@ -1073,7 +1190,7 @@ irregulares. Se la mira y se la deja donde está.
 \end{cuidado}
 \end{planta}
 
-\begin{planta}{Palán palán}{Nicotiana glauca}{Sólo uso externo, y con reservas}
+\begin{planta}{Palán palán}{Nicotiana glauca}{Solo uso externo, y con reservas}
 \phantomsection\label{pl-palan}%
 Planta de hojas carnosas verde claro, cubiertas de una capa cerosa, que
 llega a hacerse árbol. Crece en cualquier borde de camino. La tradición
@@ -1103,25 +1220,29 @@ por donde el alcaloide se absorbe.
 \noindent\small Orientación para encontrar rápido en el libro. Cada
 entrada remite a lo que la tradición local atribuye a esa planta, no a
 una indicación de tratamiento. Las marcadas con \textdagger{} tienen
-advertencia de toxicidad: leer su ficha antes que nada.
+advertencia de toxicidad, y las marcadas con \textdaggerdbl{}, otra
+advertencia (embarazo, medicación, uso prolongado): leer su ficha antes
+que nada.
 
 \vspace{1.2em}
 \begin{multicols}{2}
 \small
 \begin{description}[leftmargin=0pt, style=nextline, font=\sffamily\bfseries\footnotesize\color{verdehuerta}, itemsep=0.35em]
-  \item[Acidez y digestión.] Arcayuyo, atamisqui, cedrón, incayuyo, marrubio, molle, salvia mora.
-  \item[Alcoholismo.] Sombra de toro, cepa caballo\textdagger{}.
-  \item[Ánimo, insomnio, nervios.] Arcayuyo, cedrón, incayuyo.
-  \item[Cicatrización y heridas.] Cola de caballo, llantén, molle, retama\textdagger{}.
-  \item[Dolor de muelas.] Jarilla, molle.
-  \item[Empacho y parásitos.] Chilca, paico\textdagger{}.
-  \item[Garganta y vías respiratorias.] Algarrobo, chañar, chilca, incayuyo, llantén, marrubio, molle, salvia mora, tusca.
-  \item[Hígado.] Arcayuyo, atamisqui, cepa caballo\textdagger{}, retama\textdagger{}, sombra de toro.
-  \item[Huesos y ligamentos.] Atamisqui, cola de caballo.
-  \item[Piel.] Arcayuyo, cepa caballo\textdagger{}, llantén, palán palán\textdagger{} (sólo externo).
-  \item[Reuma y dolor muscular.] Atamisqui, chilca, jarilla, molle, sombra de toro.
-  \item[Riñón y vías urinarias.] Algarrobo, cepa caballo\textdagger{}, cola de caballo, llantén.
-  \item[Sangre (depurativas).] Cepa caballo\textdagger{}, liga\textdagger{}, molle, sombra de toro.
+  \item[Acidez y digestión.] Arcayuyo\textdaggerdbl{}, atamisqui, cedrón, incayuyo, marrubio\textdaggerdbl{}, paico\textdagger{}, salvia mora\textdaggerdbl{}.
+  \item[Alcoholismo.] Sombra de toro\textdaggerdbl{}, cepa caballo\textdagger{}.
+  \item[Ánimo, insomnio, nervios.] Arcayuyo\textdaggerdbl{}, cedrón, incayuyo, marrubio\textdaggerdbl{}.
+  \item[Cicatrización y heridas.] Cepa caballo\textdagger{}, cola de caballo\textdaggerdbl{}, llantén, molle, retama\textdagger{}.
+  \item[Dolor de muelas.] Jarilla\textdaggerdbl{}, molle.
+  \item[Empacho y parásitos.] Arcayuyo\textdaggerdbl{}, chilca, incayuyo, molle, paico\textdagger{}.
+  \item[Fiebre.] Cedrón, cepa caballo\textdagger{}, marrubio\textdaggerdbl{}.
+  \item[Garganta y vías respiratorias.] Algarrobo, chañar, chilca, incayuyo, jarilla\textdaggerdbl{}, llantén, marrubio\textdaggerdbl{}, molle, salvia mora\textdaggerdbl{}.
+  \item[Hígado.] Arcayuyo\textdaggerdbl{}, atamisqui, cepa caballo\textdagger{}, molle, retama\textdagger{}, sombra de toro\textdaggerdbl{}.
+  \item[Huesos y ligamentos.] Atamisqui, cola de caballo\textdaggerdbl{}.
+  \item[Piel.] Arcayuyo\textdaggerdbl{}, cedrón, cepa caballo\textdagger{}, llantén, palán palán\textdagger{} (solo externo).
+  \item[Presión y azúcar en sangre.] Arcayuyo\textdaggerdbl{}, liga\textdagger{}, marrubio\textdaggerdbl{}.
+  \item[Reuma y dolor muscular.] Atamisqui, cedrón, chilca, jarilla\textdaggerdbl{}, marrubio\textdaggerdbl{}, molle, sombra de toro\textdaggerdbl{}, tusca\textdaggerdbl{}.
+  \item[Riñón y vías urinarias.] Algarrobo, cepa caballo\textdagger{}, cola de caballo\textdaggerdbl{}, liga\textdagger{}, llantén, molle.
+  \item[Sangre (depurativas).] Cepa caballo\textdagger{}, cola de caballo\textdaggerdbl{}, liga\textdagger{}, molle, retama\textdagger{}, sombra de toro\textdaggerdbl{}.
 \end{description}
 \end{multicols}
 
@@ -1135,27 +1256,27 @@ de su ficha.
 \vspace{1.2em}
 \begin{multicols}{2}
 \small\raggedcolumns\raggedright
-\entradaplanta{Algarrobo}{pl-algarrobo}{\textit{Prosopis spp.}}
-\entradaplanta{Arcayuyo}{pl-arcayuyo}{\textit{Dysphania graveolens \upshape(sin.~\itshape Chenopodium graveolens\upshape)}}
+\entradaplanta{Algarrobo}{pl-algarrobo}{\textit{Prosopis \spp}}
+\entradaplanta{Arcayuyo}{pl-arcayuyo}{\textit{Dysphania graveolens \sinon{Chenopodium graveolens}}}
 \entradaplanta{Atamisqui}{pl-atamisqui}{\textit{Atamisquea emarginata}}
-\entradaplanta{Cedrón}{pl-cedron}{\textit{Aloysia citriodora \upshape(sin.~\itshape Lippia citriodora\upshape)}}
+\entradaplanta{Cedrón}{pl-cedron}{\textit{Aloysia citrodora \sinon{Lippia citriodora}}}
 \entradaplanta{Cepa caballo}{pl-cepa}{\textit{Xanthium spinosum}}
 \entradaplanta{Chamico}{pl-chamico}{\textit{Datura ferox}}
 \entradaplanta{Chañar}{pl-chanar}{\textit{Geoffroea decorticans}}
 \entradaplanta{Chilca}{pl-chilca}{\textit{Baccharis salicifolia}}
-\entradaplanta{Cola de caballo}{pl-cola}{\textit{Equisetum spp.}}
+\entradaplanta{Cola de caballo}{pl-cola}{\textit{Equisetum \spp}}
 \entradaplanta{Incayuyo}{pl-incayuyo}{\textit{Lippia integrifolia}}
-\entradaplanta{Jarilla}{pl-jarilla}{\textit{Larrea cuneifolia y especies afines}}
+\entradaplanta{Jarilla}{pl-jarilla}{\textit{Larrea \spp}}
 \entradaplanta{Liga o muérdago criollo}{pl-liga}{\textit{Phoradendron liga}}
 \entradaplanta{Llantén}{pl-llanten}{\textit{Plantago major}}
 \entradaplanta{Marrubio}{pl-marrubio}{\textit{Marrubium vulgare}}
 \entradaplanta{Molle}{pl-molle}{\textit{Schinus molle}}
-\entradaplanta{Paico}{pl-paico}{\textit{Dysphania ambrosioides \upshape(sin.~\itshape Chenopodium ambrosioides\upshape)}}
+\entradaplanta{Paico}{pl-paico}{\textit{Dysphania ambrosioides \sinon{Chenopodium ambrosioides}}}
 \entradaplanta{Palán palán}{pl-palan}{\textit{Nicotiana glauca}}
 \entradaplanta{Retama}{pl-retama}{\textit{Spartium junceum}}
 \entradaplanta{Salvia mora}{pl-salvia}{\textit{Lippia alba}}
 \entradaplanta{Sombra de toro}{pl-sombra}{\textit{Jodina rhombifolia}}
-\entradaplanta{Tusca}{pl-tusca}{\textit{Vachellia aroma \upshape(sin.~\itshape Acacia aroma\upshape)}}
+\entradaplanta{Tusca}{pl-tusca}{\textit{Vachellia aroma \sinon{Acacia aroma}}}
 \end{multicols}
 
 \chapter*{Pequeño glosario}
@@ -1166,6 +1287,8 @@ de su ficha.
 \small
 \begin{description}[leftmargin=0pt, style=nextline, font=\sffamily\bfseries\footnotesize\color{verdehuerta}, itemsep=0.35em]
   \item[Antiespasmódico.] Que calma los espasmos y los cólicos.
+  \item[Antipirético o antitérmico.] Que baja la fiebre.
+  \item[Asentamiento.] En el habla popular, malestar digestivo parecido al empacho.
   \item[Astringente.] Que contrae los tejidos y seca secreciones.
   \item[Bebida plus.] Agua con gotas de tintura madre, preparada para
   tomar a lo largo del día.
@@ -1174,10 +1297,16 @@ de su ficha.
   \item[Cocimiento o decocción.] Hervor sostenido de cortezas, raíces o semillas.
   \item[Colagogo.] Que favorece la salida de la bilis.
   \item[Depurativo.] Que la tradición asocia a «limpiar la sangre».
+  \item[Diurético.] Que aumenta la cantidad de orina.
   \item[Emenagogo.] Que estimula el flujo menstrual. Por eso mismo, varias de estas plantas están contraindicadas en el embarazo.
+  \item[Empacho.] En la medicina popular, indigestión que se atribuye a
+  comida que queda «pegada» en el estómago o el intestino.
   \item[Emplasto.] Cataplasma sostenida con un paño.
+  \item[Expectorante.] Que ayuda a aflojar y expulsar la flema.
+  \item[Faras.] Heridas agusanadas de los animales.
   \item[Hemiparásita.] Planta que toma agua y minerales de otra, pero fotosintetiza.
   \item[Hemostático.] Que ayuda a detener una hemorragia.
+  \item[Hipotensor.] Que baja la presión arterial.
   \item[Infusión.] Agua caliente volcada sobre hojas o flores, tapada.
   \item[Microdosis.] Dilución de tintura madre que se toma en gotas.
   \item[Sudorífico.] Que promueve la transpiración.
@@ -1196,12 +1325,21 @@ el agradecimiento principal.
 
 \vspace{1.2em}
 \begin{description}[leftmargin=1.2em, style=sameline, font=\normalfont, itemsep=0.4em]
-  \item[] Burgstaller Chiriani, Carlos Hugo. \textit{La vuelta a los vegetales}.
+  \item[] Burgstaller Chiriani, Carlos Hugo. \textit{La vuelta a los vegetales}. S.~l., s.~f.
   \item[] Domínguez, Juan A. \textit{Contribuciones a la materia médica argentina}. Buenos Aires, 1928.
-  \item[] Fernández y Huiaracha. \textit{Comidas típicas y plantas medicinales}.
+  \item[] Fernández y Huiaracha. \textit{Comidas típicas y plantas medicinales}. S.~l., s.~f.
   \item[] Montenegro, Pedro de. \textit{Materia médica misionera}. Manuscrito de 1710.
   \item[] Parodi, Domingo. \textit{Ensayo de botánica médica argentina comparada}. Buenos Aires, 1881.
+\end{description}
+
+\vspace{0.6em}
+\noindent Sitios consultados:
+
+\vspace{0.4em}
+\begin{description}[leftmargin=1.2em, style=sameline, font=\normalfont, itemsep=0.4em]
+  \item[] Flora Argentina. Instituto de Botánica Darwinion. \url{https://www.floraargentina.edu.ar}
   \item[] Herbotecnia. \url{https://www.herbotecnia.com.ar}
+  \item[] \textit{Plants of the World Online} (POWO). Royal Botanic Gardens, Kew. \url{https://powo.science.kew.org}
 \end{description}
 
 \lamina{img/21-mate-cedron.jpg}{%
@@ -1222,6 +1360,13 @@ Calchaquíes.
 abiertos, y a quien lea estas páginas con ganas de aprender a reconocer
 una planta.
 
+\vspace{0.8em}
+\noindent Se compuso en Palatino (URW Palladio) para el texto y Avant
+Garde Gothic (URW Gothic) para los títulos. Se terminó de imprimir en
+\pendiente{mes y año} en \pendiente{imprenta, ciudad}, sobre papel
+\pendiente{tipo y gramaje}, con una tirada de \pendiente{cantidad}
+ejemplares.
+
 \vspace{2.2em}
 \begin{center}
   {\color{verdehoja}\pgfornament[width=3.2cm]{71}}
@@ -1232,6 +1377,8 @@ una planta.
   kilómetro a la redonda.}
 
 % --- Contratapa (siempre en página par: es la última cara del libro) ---
+% En modo imprenta la contratapa va en cubierta.tex.
+\ifimprenta\else
 \clearalapar
 \thispagestyle{empty}
 \AddToShipoutPictureBG*{%
@@ -1254,11 +1401,15 @@ una planta.
         sanarnos. Por eso considero al ser urbano huérfano de madre
         naturaleza.»}\\[1.2em]
        {\sffamily\fontsize{9.5}{12}\selectfont\color{crema}
-        MARÍA EUGENIA ORELLANA}\\[0.8em]
+        MARÍA EUGENIA ORELLANA}\\[1.2em]
+       {\small\color{crema}\input{contratapa-texto}}\\[1.0em]
        {\sffamily\fontsize{8}{11}\selectfont\color{crema}
         VALLES CALCHAQUÍES · SALTA}
      \end{minipage}};
 \end{tikzpicture}
 \null
+\fi
+
+\ifimprenta\completarpliego\fi
 
 \end{document}

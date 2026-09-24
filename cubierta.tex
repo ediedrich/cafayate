@@ -1,0 +1,124 @@
+% =====================================================================
+%  YUYOS DE LA QUEBRADA DE CAFAYATE — CUBIERTA PARA IMPRENTA
+%
+%  Un solo pliego: contratapa | lomo | tapa, con 3 mm de demasía en
+%  todo el contorno. Compilar con:  pdflatex cubierta.tex
+%
+%  Antes de mandar a imprenta, confirmar con la imprenta los dos datos
+%  de abajo (páginas del interior y espesor de la hoja del papel
+%  elegido). El lomo se calcula solo.
+% =====================================================================
+
+% ------------------------------ Datos --------------------------------
+\def\paginas{60}          % páginas del interior (pdfinfo cafayate.pdf)
+\def\espesorhoja{0.11}    % mm por HOJA (dos páginas); pedirlo a la imprenta
+\def\demasia{3}           % mm
+\def\anchotapa{170}       % mm
+\def\altotapa{240}        % mm
+
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish]{babel}
+\usepackage{mathpazo}
+\renewcommand{\sfdefault}{pag}
+\usepackage[cmyk]{xcolor}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usetikzlibrary{fadings}
+
+% Lomo en mm, redondeado a décimas
+\pgfmathsetmacro{\lomo}{round(\paginas/2*\espesorhoja*10)/10}
+\pgfmathsetmacro{\anchototal}{2*\anchotapa+\lomo+2*\demasia}
+\pgfmathsetmacro{\altototal}{\altotapa+2*\demasia}
+
+\usepackage[paperwidth=\anchototal mm, paperheight=\altototal mm, margin=0pt]{geometry}
+% Caja de corte (TrimBox) y de demasía (BleedBox), en puntos PostScript
+\pgfmathsetmacro{\dbp}{\demasia*72/25.4}
+\pgfmathsetmacro{\wbp}{\anchototal/25.4*72}
+\pgfmathsetmacro{\hbp}{\altototal/25.4*72}
+\pgfmathsetmacro{\tw}{\wbp-\dbp}
+\pgfmathsetmacro{\th}{\hbp-\dbp}
+% (se aplica al comenzar el documento)
+
+\definecolor{verdehuerta}{HTML}{3F4A2E}
+\definecolor{ocre}       {HTML}{C28A34}
+\definecolor{crema}      {HTML}{FBF4E6}
+\pagestyle{empty}
+
+\begin{document}
+\edef\cajas{/TrimBox [\dbp\space\dbp\space\tw\space\th] /BleedBox [0 0 \wbp\space\hbp]}%
+\pdfpageattr\expandafter{\cajas}
+\noindent
+\begin{tikzpicture}[x=1mm, y=1mm, remember picture, overlay]
+  % Coordenadas: (0,0) es el borde inferior izquierdo con demasía.
+  \pgfmathsetmacro{\xlomo}{\demasia+\anchotapa}           % empieza el lomo
+  \pgfmathsetmacro{\xtapa}{\xlomo+\lomo}                   % empieza la tapa
+  \pgfmathsetmacro{\anchopanel}{\anchotapa+\demasia}
+  \coordinate (O) at (current page.south west);
+
+  % ---------------- Contratapa (izquierda) ----------------
+  \begin{scope}[shift={(O)}]
+    \clip (0,0) rectangle (\anchopanel,\altototal);
+    \node[anchor=center, inner sep=0] at (\anchopanel/2,\altototal/2)
+      {\includegraphics[width=\anchopanel mm]{img/23-contratapa.jpg}};
+    \fill[verdehuerta, opacity=0.72] (0,\altototal) rectangle (\anchopanel,\altototal-\demasia-120);
+    \fill[verdehuerta, opacity=0.72, path fading=south]
+      (0,\altototal-\demasia-120) rectangle (\anchopanel,\altototal-\demasia-165);
+    \node[anchor=north, inner sep=0] at (\demasia+\anchotapa/2,\altototal-\demasia-28)
+      {\begin{minipage}{130mm}\centering
+        {\sffamily\fontsize{13}{17}\selectfont\color{crema} YUYOS DE LA QUEBRADA}\\[0.6em]
+        {\color{ocre}\rule{3.4cm}{0.8pt}}\\[0.9em]
+        {\itshape\small\color{crema}
+         «Existe una idea antigua que dice que en un perímetro de un
+         kilómetro a la redonda tenemos todo lo que necesitamos para
+         sanarnos. Por eso considero al ser urbano huérfano de madre
+         naturaleza.»}\\[1.0em]
+        {\sffamily\fontsize{9.5}{12}\selectfont\color{crema} MARÍA EUGENIA ORELLANA}\\[1.2em]
+        {\small\color{crema}\input{contratapa-texto}}\\[1.0em]
+        {\sffamily\fontsize{8}{11}\selectfont\color{crema} VALLES CALCHAQUÍES · SALTA}
+      \end{minipage}};
+    % Lugar del código de barras del ISBN (blanco, 50 x 30 mm)
+    \fill[white] (\demasia+12,\demasia+12) rectangle (\demasia+62,\demasia+42);
+    \node[font=\sffamily\tiny, text=black] at (\demasia+37,\demasia+27) {ISBN / código de barras};
+  \end{scope}
+
+  % ---------------- Lomo ----------------
+  \begin{scope}[shift={(O)}]
+    \fill[verdehuerta] (\xlomo,0) rectangle (\xtapa,\altototal);
+    % Con menos de 6 mm de lomo el texto no entra legible: se omite.
+    \pgfmathparse{\lomo>=6 ? 1 : 0}
+    \ifnum\pgfmathresult=1
+    \node[rotate=-90, font=\sffamily\fontsize{8}{10}\selectfont, text=crema]
+      at ({(\xlomo+\xtapa)/2},\altototal/2)
+      {YUYOS DE LA QUEBRADA DE CAFAYATE \quad{\color{ocre}·}\quad MARÍA EUGENIA ORELLANA};
+    \fi
+  \end{scope}
+
+  % ---------------- Tapa (derecha) ----------------
+  \begin{scope}[shift={(O)}]
+    \clip (\xtapa,0) rectangle (\anchototal,\altototal);
+    \node[anchor=center, inner sep=0] at ({\xtapa+\anchopanel/2},\altototal/2)
+      {\includegraphics[width=\anchopanel mm]{img/01-cubierta.jpg}};
+    \fill[verdehuerta, opacity=0.74, path fading=south]
+      (\xtapa,\altototal) rectangle (\anchototal,\altototal-\demasia-106);
+    \fill[verdehuerta, opacity=0.88]
+      (\xtapa,0) rectangle (\anchototal,\demasia+34);
+    \fill[verdehuerta, opacity=0.88, path fading=north]
+      (\xtapa,\demasia+34) rectangle (\anchototal,\demasia+60);
+    \node[anchor=north, inner sep=0] at ({\xtapa+\anchotapa/2},\altototal-\demasia-20)
+      {\begin{minipage}{140mm}\centering
+        {\sffamily\bfseries\fontsize{27}{31}\selectfont\color{crema} Yuyos}\\[0.25em]
+        {\sffamily\fontsize{15}{19}\selectfont\color{crema} de la Quebrada de Cafayate}\\[0.6em]
+        {\color{ocre}\rule{5cm}{1pt}}\\[0.7em]
+        {\sffamily\fontsize{11}{14}\selectfont\color{crema} MARÍA EUGENIA ORELLANA}
+      \end{minipage}};
+    \node[anchor=south, inner sep=0] at ({\xtapa+\anchotapa/2},\demasia+15)
+      {\begin{minipage}{140mm}\centering
+        {\sffamily\bfseries\fontsize{9}{12}\selectfont\color{crema}
+         LA BOTICA COMPLETA, A UN KILÓMETRO A LA REDONDA\\[0.3em]
+         VALLES CALCHAQUÍES · SALTA}
+      \end{minipage}};
+  \end{scope}
+\end{tikzpicture}
+\end{document}
