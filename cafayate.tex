@@ -50,6 +50,7 @@
 \usepackage{floatpag}
 \floatpagestyle{empty}   % páginas de lámina sin cornisa ni folio
 \usepackage{needspace}
+\usepackage{placeins}   % \FloatBarrier: las láminas del capítulo, antes del filete
 \usepackage[a4paper]{geometry}
 \usepackage{titlesec}
 \usepackage{fancyhdr}
@@ -62,6 +63,17 @@
 \usepackage[skins,breakable]{tcolorbox}
 \usepackage{pgfornament}
 \usepackage[hidelinks]{hyperref}
+
+% Sin viudas ni huérfanas: el último renglón de un párrafo nunca queda
+% solo arriba de una página (pasaba al pegar las cajas a su texto), y el
+% primero nunca queda solo al pie.
+\widowpenalty=10000
+\clubpenalty=10000
+\displaywidowpenalty=10000
+% Con viudas y huérfanas prohibidas, a veces la página termina un renglón
+% antes: mejor un pie de página desparejo que estirar el espacio entre
+% fichas.
+\raggedbottom
 \urlstyle{same}
 
 % ---------------------------- Formato de página ----------------------
@@ -283,7 +295,7 @@
 % Si el filete no entra en la página, se omite: un filete solo en una
 % página nueva se lee como una página en blanco.
 \newcommand{\cierre}{%
-  \par
+  \par\FloatBarrier
   \ifdim\pagetotal=0pt\relax\else
   \ifdim\dimexpr\pagegoal-\pagetotal\relax<5\baselineskip\relax\else
   \vspace{1.6em}
@@ -794,7 +806,7 @@ excelencia en todo el valle: contra la tos, la gripe, la bronquitis, el
 catarro y la tos convulsa. Se cuece la corteza —unos 20 gramos por litro
 de agua, unos minutos— y en el campo se le agrega un «quemadillo»,
 azúcar quemada con una brasa, que le quita el amargor. El arrope, el
-dulce que resulta de la cocción del fruto, también alivia la garganta.
+dulce que resulta de la cocción del fruto, se toma también para la garganta.
 \end{planta}
 
 \laminadiferida{img/10-chanar.jpg}{%
@@ -818,7 +830,7 @@ ayudar a adelgazar.
 \begin{cuidado}[Los frutos, con mesura]
 No hay evidencia de que la bebida de cáscara de molle haga adelgazar, y
 los frutos en cantidad irritan el estómago y el intestino, sobre todo en
-los chicos. No se usa en el embarazo ni como reemplazo de una consulta
+los chicos. No se usa en el embarazo, y no reemplaza la consulta
 por el peso.
 \end{cuidado}
 \end{planta}
@@ -834,7 +846,7 @@ y muy perfumadas, que inundan el monte durante la floración. La corteza
 en decocción es un desinfectante fuerte, muy usado por las mujeres en
 baños de asiento para tratar el flujo excesivo o anormal. La decocción
 de las hojas se usó tradicionalmente contra la sífilis, y la infusión de
-las mismas hojas alivia los dolores musculares.
+las mismas hojas se usa para los dolores musculares.
 \begin{cuidado}[La sífilis necesita antibióticos]
 No existe evidencia clínica de que la tusca cure la sífilis. Es una
 infección grave, que hoy se cura con antibióticos y que, sin
@@ -848,12 +860,12 @@ Ante la sospecha, consultar.
 El nombre se suele explicar desde el quechua, donde \emph{misqui}
 significa dulce. Arbusto ramoso, de uno a
 tres metros de alto, ramas rectas, corteza verde amarillenta, hojas
-pequeñas y ovaladas de color verde grisáceo. Las ramas en cocimiento y
-usadas en baños alivian los dolores de huesos; la infusión se usó
+pequeñas y ovaladas de color verde grisáceo. Las ramas en cocimiento se
+usan en baños para los dolores de huesos; la infusión se usó
 tradicionalmente contra la clorosis, la insuficiencia de hierro en la
 sangre, porque se le atribuye contenido de ese mineral. Las ramas calentadas en
-las cenizas y aplicadas sobre los músculos calman dolores reumáticos y
-contracturas. A la infusión se la tiene por reconstituyente del hígado, y las hojas
+las cenizas se aplican sobre los músculos para los dolores reumáticos y
+las contracturas. A la infusión se la tiene por reconstituyente del hígado, y las hojas
 en cocimiento se usaron contra la acidez estomacal. También se lo conoce
 como «mata-gusanos»: se usaba para curar las faras de los animales, y
 sus ramas mezcladas con las vainas de algarroba almacenadas resultaban
@@ -876,7 +888,7 @@ debe hacerse con acompañamiento médico.
 \end{cuidado}
 \end{planta}
 
-\lamina[0.82\textwidth]{img/16-lamina-arboles-espinosos.jpg}{%
+\lamina[0.74\textwidth]{img/16-lamina-arboles-espinosos.jpg}{%
   Tusca, atamisqui y sombra de toro: los tres que cierran el capítulo
   del monte.}
 
@@ -1010,8 +1022,8 @@ cedrón de todos los días.
 Esta planta se usaba en tiempos antiguos para el trueque con los incas,
 y de ahí su nombre. Es, por sobre todo, la planta de la tristeza: se usa
 para alejar la melancolía, el pesimismo y el nerviosismo. Un puñado de
-hojas y flores en agua sacada del hervor trata los trastornos
-digestivos, los empachos de agua y fortalece el estómago —unos 30 a 40
+hojas y flores en agua sacada del hervor se toma para los trastornos
+digestivos y los empachos de agua, y para fortalecer el estómago —unos 30 a 40
 gramos por litro, tres veces por día. Se usa también en enfermedades
 pulmonares, catarros crónicos, bronquitis y asma. Y queda una costumbre
 menor y encantadora: una ramita detrás de la oreja alivia el dolor de
@@ -1026,8 +1038,8 @@ violáceas; cuando las hojas se tornan amarillentas es el momento de la
 cosecha. En infusión se usa como digestivo y como colagogo, contra la
 acumulación de bilis. En cocimiento y de forma externa se aplica para
 remover asperezas de la piel y tratar inflamaciones, eczemas,
-sarpullidos y erupciones. Sirve también para el empacho, y contra los
-trastornos nerviosos: una infusión al dormir es muy recomendable para
+sarpullidos y erupciones. Se usa también para el empacho y para los
+trastornos nerviosos: una infusión al dormir se recomienda a
 quienes padecen insomnio. Se lo usa para la hipertensión, y se dice que
 mojando las zonas con un cocimiento todas las noches van desapareciendo
 pecas y manchas. Es de sabor dulce, parecido a la miel, y buen compañero
@@ -1082,7 +1094,7 @@ Tampoco se usa durante el embarazo.
 \end{cuidado}
 \end{planta}
 
-\lamina[0.82\textwidth]{img/13-lamina-aromaticas.jpg}{%
+\lamina[0.74\textwidth]{img/13-lamina-aromaticas.jpg}{%
   Cedrón, incayuyo y salvia mora: las tres aromáticas de la casa.}
 
 \laminapagina{img/14-lamina-digestivas.jpg}{%
@@ -1097,7 +1109,7 @@ Tampoco se usa durante el embarazo.
 \begin{planta}{Llantén}{Plantago major}{Hojas}
 \phantomsection\label{pl-llanten}%
 Hierba que se abre en roseta, de hojas lanceoladas y ovales con
-nervaduras marcadas y flores en espigas. Como cataplasma sirve para
+nervaduras marcadas y flores en espigas. Como cataplasma se usa para
 quemaduras y úlceras. Las infusiones se usan para limpiar riñones,
 intestino y vejiga, y para los dolores de garganta. En la tos, la
 bronquitis, la laringitis y la faringitis se la usa porque se le
@@ -1108,8 +1120,8 @@ hojas, filtrando el líquido y disolviéndolo con azúcar a baño maría
 par de cucharaditas al día, dice la tradición, alivian el dolor de las
 úlceras de estómago. La tradición le atribuye a la infusión propiedades
 hemostáticas: detener el sangrado tanto de cortaduras como de fístulas. Una hoja bien lavada
-aplicada sobre una herida ayuda a detener el flujo de sangre, a
-cicatrizar y a prevenir infecciones. Una gotita del jugo de hojas
+se aplica sobre las heridas para detener el sangrado y ayudar a
+cicatrizar, y se le atribuye prevenir infecciones. Una gotita del jugo de hojas
 machacadas se usa para el dolor de oídos. Se puede comer en ensalada: tiene
 vitaminas A, B1, C y calcio.
 \begin{cuidado}[Nada en el oído si supura]
@@ -1147,7 +1159,7 @@ y penetrante, que es la mejor seña para reconocerla. Las flores son
 diminutas y verdes, sin pétalos, apretadas en grupitos a lo largo de
 espigas con hojas. Yuyo poco llamativo y muy conocido desde antiguo, sobre todo como
 antiparasitario: ya se usaban sus semillas machacadas y en cocimiento.
-La infusión de las hojas actúa contra el empacho y los asentamientos. Se lo
+La infusión de las hojas se toma contra el empacho y los asentamientos. Se lo
 usa como digestivo, para los gases, los cólicos y los calambres, y
 también para la parálisis de la lengua. Colgar ramos en una habitación
 ahuyenta pulgas y moscas.
@@ -1161,6 +1173,10 @@ lactancia no se usa, y en adultos, solo con guía de alguien que la
 conozca bien, por períodos cortos.
 \end{cuidado}
 \end{planta}
+
+\lamina[0.6\textwidth]{img/15-lamina-cicatrizantes.jpg}{%
+  Llantén, cola de caballo y paico: la roseta, el tallo hueco y la
+  espiga dentada.}
 
 \begin{planta}{Liga o muérdago criollo}{Phoradendron liga}{Toda la planta}
 \phantomsection\label{pl-liga}%
@@ -1183,10 +1199,6 @@ oncológico.
 
 \lamina[0.56\textwidth]{img/18-liga-muerdago.jpg}{%
   La liga instalada sobre su hospedante, con sus frutos translúcidos.}
-
-\lamina[0.6\textwidth]{img/15-lamina-cicatrizantes.jpg}{%
-  Llantén, cola de caballo y paico: la roseta, el tallo hueco y la
-  espiga dentada.}
 
 \cierre
 
@@ -1320,11 +1332,11 @@ de su ficha.
 \begin{description}[leftmargin=0pt, style=nextline, font=\sffamily\bfseries\footnotesize\color{verdehuerta}, itemsep=0.1em, topsep=0pt]
   \item[Antiespasmódico.] Que calma los espasmos y los cólicos.
   \item[Antipirético o antitérmico.] Que baja la fiebre.
+  \item[Antiséptico.] Que impide que prosperen los microbios.
   \item[Asentamiento.] En el habla popular, malestar digestivo parecido al empacho.
   \item[Astringente.] Que contrae los tejidos y seca secreciones.
   \item[Bebida plus.] Agua con gotas de tintura madre, para tomar en el día.
-  \item[Antiséptico.] Que impide que prosperen los microbios.
-  \item[Cardiotónico.] Que se atribuye fortalecer el corazón.
+  \item[Cardiotónico.] Al que se atribuye la capacidad de fortalecer el corazón.
   \item[Carminativo.] Que ayuda a expulsar los gases.
   \item[Cataplasma.] Planta machacada aplicada sobre la piel.
   \item[Cocimiento o decocción.] Hervor sostenido de cortezas, raíces o semillas.
