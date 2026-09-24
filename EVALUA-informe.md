@@ -2,226 +2,193 @@
 
 ## 1. Encabezado
 
-- **Commit evaluado:** `a3b9a88` (rama `main`, 24/09/2026 06:29 −03), «Correcciones de la evaluación editorial».
+- **Commit evaluado:** `94eff35` (rama `main`, 24/09/2026 06:57 −03), «Seguridad: sin lavados oculares en el algarrobo; liga advertida como tóxica en ficha y nota de lectura».
 - **Fecha:** 24 de septiembre de 2026.
 - **Evaluó:** Claude (Anthropic), a pedido de Eduardo Diedrich.
-- **Material leído:** `cafayate.tex`, `contratapa-texto.tex`, `cubierta.tex`, `cafayate.pdf` y `cubierta.pdf` commiteados (interior en modo imprenta, 60 págs.), las 23 láminas de `img/` y las fotos del cuadernillo original.
+- **Material leído:** `cafayate.tex`, `contratapa-texto.tex`, `cubierta.tex`, `cafayate.pdf` y `cubierta.pdf` commiteados (interior de 60 págs.) y las 23 láminas de `img/`.
 
-**Nota de método.** El repositorio sigue sin `evalua.py`. Calculé los puntajes automáticos aplicando al pie de la letra la definición de cada control, con los mismos criterios que en la evaluación de `bea8a8e`, para que las dos sean comparables. El fuente compila; en mi entorno falta `spanish.ldf` y compilé cargando el español por `\babelprovide`, así que el control de renglones desbordados es aproximado. Todo lo demás se midió sobre el PDF commiteado. Las páginas se citan por el folio impreso.
+**Nota de método.** El repositorio sigue sin `evalua.py`. Calculé los puntajes automáticos aplicando la definición de cada control, con los mismos criterios que en las evaluaciones de `bea8a8e` y `a3b9a88`, para que las tres sean comparables. El fuente compila. En mi entorno falta `spanish.ldf` y compilé cargando el español con `\babelprovide`, así que el control de renglones desbordados es aproximado. Todo lo demás se midió sobre el PDF commiteado, que corresponde al fuente de este commit. Las páginas se citan por el folio impreso.
 
-El `evalua.json` commiteado en `a3b9a88` todavía trae los puntajes manuales de `bea8a8e`. Con el script, `--ref a3b9a88` leería esos puntajes viejos: hay que reemplazarlo por el que acompaña este informe.
+El `evalua.json` commiteado en `94eff35` trae los puntajes manuales de la evaluación de `a3b9a88`. Hay que reemplazarlo por el que acompaña este informe.
+
+**Qué cambió desde `a3b9a88`:**
+
+- Se quitaron los lavados oculares del algarrobo.
+- La liga ahora figura como tóxica en su caja y en la nota de lectura.
+- La lámina de la liga se achicó y quedó en la misma página que su ficha.
+- Se rehízo la lámina 16.
 
 ## 2. Condiciones excluyentes
 
 | # | Condición | ¿Se da? | Caso |
 |---|---|---|---|
 | 1 | No compila / no hay PDF | No | — |
-| 2 | Planta tóxica con dosis de uso interno | No | Retama, cepa caballo, paico, chamico y palán palán sin dosis. |
-| 3 | Promesa de curar enfermedad grave sin aclarar falta de evidencia | No | Tusca/sífilis (p. 18), liga/cáncer (p. 35) y sombra de toro/alcoholismo (p. 19) tienen su caja. |
-| 4 | Ilustración de una especie distinta de la ficha | No | La lámina 15 (p. 36) ahora muestra llantén, cola de caballo y paico. Resuelta. |
+| 2 | Planta tóxica con dosis de uso interno | No | Retama, cepa caballo, paico, liga, chamico y palán palán, todas sin dosis. |
+| 3 | Promesa de curar enfermedad grave sin aclarar falta de evidencia | No | Tusca y sífilis (p. 18), sombra de toro y alcoholismo (p. 19), liga y cáncer (p. 35): las tres tienen su caja. |
+| 4 | Ilustración de una especie distinta de la ficha | No | — |
 | 5 | Falta una imagen referenciada | No | Las 23 existen. |
 | 6 | Planta tóxica con nombre científico equivocado | No | — |
 
-Ninguna condición excluyente.
+No se da ninguna condición excluyente.
 
 ## 3. Tabla de puntajes
 
 | # | Dimensión | Automático | Manual | Total |
 |---|---|---:|---:|---:|
-| 1 | Contenido, fidelidad y estructura | 1,71 / 2 | 11 / 13 | 12,71 / 15 |
+| 1 | Contenido, fidelidad y estructura | 1,71 / 2 | 12 / 13 | 13,71 / 15 |
 | 2 | Rigor botánico | 4,00 / 4 | 6 / 8 | 10,00 / 12 |
-| 3 | Seguridad sanitaria | 7,00 / 7 | 3 / 6 | 10,00 / 13 |
+| 3 | Seguridad sanitaria | 7,00 / 7 | 5 / 6 | 12,00 / 13 |
 | 4 | Redacción y estilo | — | 6 / 8 | 6,00 / 8 |
 | 5 | Corrección ortotipográfica | 3,00 / 4 | 5 / 6 | 8,00 / 10 |
-| 6 | Ilustraciones | 3,68 / 4 | 5 / 8 | 8,68 / 12 |
+| 6 | Ilustraciones | 3,60 / 4 | 6 / 8 | 9,60 / 12 |
 | 7 | Diseño y maquetación | 2,00 / 2 | 4 / 8 | 6,00 / 10 |
 | 8 | Aparato editorial y paratextos | 3,75 / 4 | 2 / 4 | 5,75 / 8 |
 | 9 | Preimpresión y producción | 4,00 / 5 | 1 / 2 | 5,00 / 7 |
 | 10 | Derechos y aspectos legales | 0,50 / 1 | 2 / 4 | 2,50 / 5 |
-| | **Nota analítica** | **29,64** | **45** | **74,64** |
-| | **Nota holística** | | | **78** |
+| | **Nota analítica** | **29,57** | **49** | **78,57** |
+| | **Nota holística** | | | **80** |
 
-Evaluación anterior (`bea8a8e`): analítica 64,88, holística 66, NO APTO.
+Evaluaciones anteriores:
+
+| Commit | Analítica | Holística | Veredicto |
+|---|---:|---:|---|
+| `bea8a8e` | 64,88 | 66 | NO APTO |
+| `a3b9a88` | 74,64 | 78 | Otra ronda |
+| `94eff35` | 78,57 | 80 | Apto con correcciones menores |
 
 ## 4. Observaciones por dimensión
 
-### 1. Contenido, fidelidad y estructura — Bueno (11)
+### 1. Contenido, fidelidad y estructura — Excelente (12)
 
-*Automático (1,71).* 18 de 21 fichas superan las 60 palabras sin contar las cajas. Quedan cortas retama (57), palán palán (47) y chamico (44), que son cortas a propósito. Sigue valiendo la sugerencia de excluir del control las fichas de «Las que no se tocan».
+*Automático (1,71).* 18 de 21 fichas superan las 60 palabras sin contar las cajas. Quedan cortas retama (59), palán palán (49) y chamico (46), que son cortas a propósito. El algarrobo quedó en 173 palabras después del recorte.
 
-*Manual.* La nueva nota «Sobre esta edición» (p. ix) declara lo que se omitió: la sección «Fitoterapia», los usos contra enfermedades que requieren atención médica y las aplicaciones en los ojos. Volvieron los usos suprimidos de cepa caballo (p. 24) y molle (p. 15). Paico (p. 35), marrubio (p. 31) y salvia mora (p. 29) tienen ahora descripciones que permiten reconocerlas. La voz y la estructura siguen siendo lo mejor del libro.
-
-Queda una falla de fidelidad declarada y no cumplida. La ficha del algarrobo (p. 13) conserva «lavados para infecciones oculares», justo lo que la nota dice haber quitado, y además sigue desvirtuando las «cataratas» del cuadernillo.
+*Manual.* Se resolvió la única falla de fidelidad que quedaba. La nota «Sobre esta edición» (p. ix) dice que el libro no incluye aplicaciones en los ojos, y ahora la ficha del algarrobo (p. 13) lo cumple. Con eso también desaparece la versión desvirtuada de las «cataratas» del cuadernillo. Siguen en pie la voz de la autora y de los vecinos, los usos restituidos de cepa caballo (p. 24) y molle (p. 15) y la estructura por capítulos. No llega a 13 porque las tres fichas de «Las que no se tocan» siguen muy magras para reconocer la planta sin la lámina.
 
 ### 2. Rigor botánico — Bueno (6)
 
 *Automático (4).* Los 21 nombres están bien formados y no hay afirmaciones tajantes sin atribuir.
 
-*Manual.* La nomenclatura quedó bien:
-
-- La nota cita Flora Argentina y POWO y avisa de la corrección de la tusca.
-- *Aloysia citrodora* está corregida (p. 27).
-- «spp.» y «sin.» siguen un criterio único.
-- Salvia mora aclara que el nombre local designa también especies de *Salvia*. El cuadernillo dice *Lippia alba* en el texto y muestra una *Salvia* azul en las fotos, así que la aclaración era necesaria.
-
-Lo que impide llegar a Excelente son las atribuciones que todavía se presentan como hechos:
+*Manual.* La nomenclatura sigue bien, con fuente citada, criterio uniforme para «spp.» y «sin.», y la aclaración de la salvia mora. Siguen sin corregirse las atribuciones presentadas como hechos:
 
 - **Cedrón** (p. 27): «alivia jaquecas y fiebres», «con buen resultado sobre las palpitaciones».
 - **Paico** (p. 35): «Es digestivo, distiende el intestino, calma los cólicos».
-- **Marrubio** (p. 31): «Controla la acidez» y «está recomendada para quienes tratan esa dolencia», dicho de la diabetes.
-- **Llantén** (p. 33): «un par de cucharaditas al día disminuyen el dolor de las úlceras de estómago».
+- **Marrubio** (p. 31): «Controla la acidez».
+- **Llantén** (p. 33): «un par de cucharaditas al día disminuyen el dolor de las úlceras».
 - **Atamisqui** (p. 18): «La infusión es buen reconstituyente hepático».
+- **Liga** (p. 35): «Es un fuerte depurador de la sangre». Este caso no se había señalado antes.
 
-Hay además un detalle de hábito en el atamisqui: «Arbusto grande, de hasta un metro y medio». Es contradictorio en sí mismo, y la especie suele superar esa altura.
+El hábito del atamisqui («Arbusto grande, de hasta un metro y medio», p. 18) sigue sin corregir.
 
-### 3. Seguridad sanitaria — Suficiente (3)
+### 3. Seguridad sanitaria — Bueno (5)
 
-*Automático (7).* Ninguna planta tóxica trae dosis. La nota cubre la consulta y la evidencia, y trae el 0800.
+*Automático (7).* Ninguna planta con advertencia de toxicidad trae dosis, incluida la liga, que ahora entra en el control. La nota cubre la consulta y la evidencia, y trae el 0800.
 
-*Manual.* El avance es grande:
+*Manual.* Las dos contradicciones que dejaban esta dimensión en Suficiente están resueltas:
 
-- Jarilla (p. 23) tiene una advertencia hepática y renal bien escrita.
-- Salvia mora (p. 29) y marrubio (p. 31) advierten sobre el embarazo.
-- La tusca tiene su caja sobre la sífilis (p. 18).
-- Arcayuyo (p. 28) y marrubio advierten sobre la interacción con medicación.
-- El índice de dolencias distingue † de ‡.
-- Las cajas ya no se cortan.
+- **Algarrobo** (p. 13): ya no recomienda lavados oculares, y la nota y la ficha coinciden.
+- **Liga** (p. 35): la caja la nombra como tóxica, sobre todo los frutos, y enumera los síntomas. La nota de lectura la cuenta entre las cuatro plantas de toxicidad conocida, y el † del índice de dolencias ahora tiene respaldo. La caja además relaciona la baja de presión con el uso hipotensor de la ficha.
 
-Si no fuera por lo que sigue, esta dimensión estaría en 5. La rúbrica, sin embargo, pone en Suficiente cualquier contradicción visible entre la nota y las fichas, y hay dos:
+Quedan faltas menores, que impiden el 6:
 
-- **Algarrobo** (p. 13). La nota de lectura dice que el libro no incluye aplicaciones en los ojos, y la ficha recomienda lavados oculares con un preparado casero, sin advertencia. Es la falla de seguridad más concreta que queda.
-- **Liga** (p. 35). En el índice de dolencias lleva †, que significa advertencia de toxicidad, pero ni su caja ni la nota de lectura la nombran como tóxica. La nota enumera cinco plantas tóxicas y la liga no está entre ellas.
-
-Hay también dos faltas menores:
-
-- La bebida de cáscara de fruto de molle «para adelgazar» (p. 15) no tiene ninguna salvedad.
-- La precaución de las gotas de llantén en el oído (p. 33) va dentro del texto y no en caja.
+- **Molle** (p. 15): la bebida de cáscara del fruto «para adelgazar» no tiene ninguna salvedad.
+- **Llantén** (p. 33): la precaución de las gotas en el oído va dentro del texto y no en caja.
+- **Cedrón** (p. 27): se lo recomienda para las palpitaciones sin ningún aviso a quien tenga una afección cardíaca o tome medicación para el corazón.
 
 ### 4. Redacción y estilo — Bueno (6)
 
-La prosa sigue siendo cuidada y cercana. Se corrigieron los cambios de género de la cepa caballo. Algunos agregados nuevos quedaron torpes:
+No hubo cambios en los pasajes señalados:
 
-- «La tradición la considera un excelente digestivo, y como antiespasmódico dice que da muy buenos resultados», y dos veces dos puntos en la misma oración: «vías respiratorias: tos, faringitis, laringitis: se le atribuye…» (salvia mora, p. 29).
-- «a la planta, usada en tos, bronquitis, laringitis y faringitis, se le atribuyen…» (llantén, p. 33).
-- Sigue sin sujeto claro «Al tener un enfermo más, tienen un eslabón más» (p. xi).
+- Salvia mora (p. 29): «como antiespasmódico dice que da muy buenos resultados», y dos veces dos puntos en la misma oración.
+- Llantén (p. 33): «a la planta, usada en tos, bronquitis, laringitis y faringitis, se le atribuyen…».
+- Página xi: «Al tener un enfermo más, tienen un eslabón más», sin sujeto claro.
 
-Las citas del cuadernillo siguen sin distinguirse del texto editorial fuera de los epígrafes y de la única caja de la p. 8.
+Los agregados de este commit están bien escritos: la oración nueva del algarrobo y la caja de la liga. Las citas del cuadernillo siguen sin distinguirse del texto editorial fuera de los epígrafes.
 
 ### 5. Corrección ortotipográfica — Bueno (5)
 
-*Automático (3).* No hay comillas rectas ni guiones por raya (1 + 1), y todos los géneros van en cursiva, incluida *Datura* en p. 39 (1). El control de palabras repetidas vuelve a dar 0 por los cuatro «palán palán», que es un falso positivo. También marcaría «p. ej.,» y «S. l., s. f.», que son correctos.
+*Automático (3).* No hay comillas rectas (1) ni guiones por raya (1), y los géneros van en cursiva (1). El control de palabras repetidas sigue en 0 por los «palán palán», que son un falso positivo.
 
-*Manual.* Los criterios quedaron uniformes:
+*Manual.* Los criterios siguen uniformes. Sigue el error de correspondencia del epígrafe de la lámina 14 (p. 32), que llama a arcayuyo y marrubio «los dos amargos» cuando la ficha del arcayuyo (p. 28) lo describe de sabor dulce.
 
-- «spp.» y «sin.» van en redonda en todas partes.
-- Desapareció «y especies afines».
-- La jarilla se llama igual en la lámina y en la ficha.
-- Las unidades van en letra.
-- «solo» va sin tilde en todo el libro.
-- Los epígrafes terminan en punto.
+### 6. Ilustraciones — Bueno (6)
 
-Queda un error de correspondencia entre textos. El epígrafe de la lámina 14 (p. 32) llama a arcayuyo y marrubio «los dos amargos», y la ficha del arcayuyo (p. 28) y el epígrafe del capítulo 5 dicen que el arcayuyo es de sabor dulce, parecido a la miel.
+*Automático (3,60).* Las imágenes existen (1). La resolución baja de 2,68 a 2,60 porque la nueva lámina 16 mide 896 × 1200 contra los 1792 × 2400 de la anterior: queda en 217 ppp en la p. 20. Hay siete imágenes debajo de 300 ppp:
 
-### 6. Ilustraciones — Bueno (5)
+- láminas 15 y 16, a 217 ppp;
+- apertura de la parte I y canasto, a 238;
+- infusión y tintura, a 267;
+- tapa y contratapa, a 249.
 
-*Automático (3,68).* Las imágenes existen (1). Hay seis imágenes debajo de 300 ppp: la nueva lámina 15 (217 ppp, p. 36), la apertura de la parte I y el canasto (238), infusión y tintura (267), y tapa y contratapa en `cubierta.pdf` (249 a 253). Eso da 2,68. La lámina 15 reemplazó un archivo de 1792 × 2400 por uno de 896 × 1200, lo que es una regresión de resolución.
+Es la segunda vez que una lámina rehecha entra a la mitad de resolución que la que reemplaza.
 
-*Manual.* Las tres láminas rehechas son buenas:
+*Manual.* La lámina 16 (p. 20) está bien resuelta. El atamisqui ahora se reconoce por sus hojas emarginadas, las ramas verde amarillentas, la flor blanca de estambres largos y el fruto globoso. Además la lámina perdió el paisaje enmarcado, así que el estilo de las láminas de fichas quedó más parejo. Quedan dos detalles botánicos en la lámina 19 (p. 40), justo en las plantas venenosas:
 
-- La 15 (p. 36) muestra la roseta con espigas del llantén, el tallo articulado de la cola de caballo con estróbilo y el paico con sus glomérulos en espigas foliosas.
-- La 13 (p. 30) muestra el cedrón con hojas verticiladas, el incayuyo con cabezuelas blanquecinas y la *Lippia alba* con cabezuelas lilas axilares.
-- La 14 (p. 32) muestra el marrubio con verticilastros blancos y tallo cuadrado.
+- **Palán palán:** aparece como hierba con raíz, y es un arbusto.
+- **Chamico:** la espinación del fruto corresponde a *D. stramonium* más que a *D. ferox*.
 
-Desapareció la textura repetida entre las láminas 13 y 16. Quedan estos problemas:
-
-- **Atamisqui** (lámina 16, p. 20): el arbusto es genérico, sin sus hojas emarginadas ni su flor.
-- **Palán palán** (lámina 19): aparece como hierba con raíz.
-- **Chamico** (lámina 19): la espinación es de *D. stramonium* más que de *D. ferox*.
-- **Estilos:** conviven láminas con paisaje enmarcado arriba (12, 16) y láminas limpias sobre fondo crema (13, 14, 15).
-
-El mensaje del commit dice «láminas 13, 14, 15 y 16 corregidas», pero `img/16-lamina-arboles-espinosos.jpg` no cambió.
+Esos dos detalles son el límite superior de Bueno.
 
 ### 7. Diseño y maquetación — Suficiente (4)
 
-*Automático (2).* No hay *overfull hbox* en mi compilación, que es aproximada (ver la nota de método).
+*Automático (2).* No hay *overfull hbox* en mi compilación, que es aproximada.
 
-*Manual.* Mejoró mucho respecto de `bea8a8e`:
-
-- Las advertencias ya no se cortan.
-- Las láminas están junto a sus fichas.
-- El título de la parte I corta bien.
-- La cubierta salió del interior.
-
-Pero la maquetación no quedó «sin blancos», como dice el commit:
+*Manual.* La liga y su lámina ahora comparten la p. 35, lo que es una mejora. La p. 38 queda en blanco antes del capítulo 7, que abre en impar; es convencional y no la cuento como falla. Lo demás sigue igual:
 
 - **p. 26:** página con la cornisa, el folio y el filete de cierre del capítulo 4, y nada más.
-- **pp. 21, 28, 29, 31 y 34:** entre un tercio y la mitad de la página en blanco. Cuatro de esas páginas son casi seguidas, en el capítulo 5.
-- **p. 6:** cierre del capítulo 1 con tres líneas y el filete.
-- **Cornisas y folios de las láminas:** las láminas flotantes (pp. 20, 25, 30, 32, 36, 37 y 46) llevan cornisa y folio, y las de página entera (pp. 14, 16, 17, 22 y 40) no. Es una inconsistencia visible entre páginas del mismo tipo.
+- **pp. 19, 21, 28, 29, 31 y 34:** entre un tercio y la mitad de la página en blanco. Tres de ellas son del capítulo 5.
+- **Cornisas y folios de las láminas:** las láminas flotantes llevan cornisa y folio, y las de página entera (pp. 14, 16, 17 y 22) no.
 
 ### 8. Aparato editorial y paratextos — Suficiente (2)
 
 *Automático (3,75).* El índice de plantas está completo (1) y el de dolencias no nombra plantas sin ficha (1). En la bibliografía, 6 de 8 referencias tienen año o URL (0,75). No hay referencias sin resolver (1).
 
-*Manual.* Mejoraron varias piezas:
+*Manual.* No hubo cambios:
 
-- La contratapa ya presenta el libro (`contratapa-texto.tex`).
-- El índice de dolencias quedó corregido: tusca fuera de «Garganta» y dentro de «Reuma», y retama y cola de caballo en «Sangre».
-- El glosario ahora trae diurético, expectorante, antipirético, hipotensor, empacho, asentamiento y faras.
-
-El nivel queda en Suficiente por dos piezas que siguen incompletas:
-
-- **Colofón** (p. 47): no tiene datos de impresión. Fecha, imprenta, papel y tirada figuran como `\pendiente`.
-- **Bibliografía** (p. 45): Burgstaller y «Fernández y Huiaracha» siguen sin lugar ni año, y la segunda sin nombres de pila. Los sitios consultados no tienen fecha de consulta.
-
-Faltan además en el glosario algunos términos que el texto usa, como cardiotónico, enuresis y antiséptico.
+- **Colofón** (p. 47): fecha, imprenta, papel y tirada siguen en `\pendiente`.
+- **Bibliografía** (p. 45): Burgstaller y «Fernández y Huiaracha» siguen sin lugar ni año, y la segunda sin nombres de pila. Los sitios no tienen fecha de consulta.
+- **Glosario:** faltan cardiotónico, enuresis y antiséptico.
 
 ### 9. Preimpresión y producción — Suficiente (1)
 
 *Automático (4).*
 
-- **Fuentes:** todas Type 1 incrustadas (1).
+- **Fuentes:** todas incrustadas, sin Type 3 (1).
 - **Páginas:** 60, múltiplo de 4 (1).
 - **Tamaño:** 17 × 24 cm en todas las páginas (1).
-- **Demasía:** el interior no tiene láminas a sangre, así que el control se cumple sin casos (1). La cubierta sí declara `TrimBox` y `BleedBox` con 3 mm.
-- **Perfil de color:** ninguno de los dos PDF lleva *OutputIntent* ni cumple PDF/X (0).
+- **Demasía:** no hay láminas a sangre en el interior, así que el control se cumple sin casos (1).
+- **Perfil de color:** ningún PDF lleva *OutputIntent* (0).
 
-*Manual.* De los cuatro aspectos, dos están resueltos y dos no:
-
-- **Cubierta aparte:** resuelta, con lomo calculado y demasía.
-- **Negro del texto:** resuelto, en 100 % K. Los colores vectoriales están en CMYK.
-- **Conversión a CMYK:** falta. Las 23 imágenes siguen en RGB y no hay prueba de color.
-- **Especificaciones con la imprenta:** faltan. El espesor del papel (0,11 mm por hoja) está puesto a ojo, «pedirlo a la imprenta».
-
-Con 60 páginas, el lomo da 3,3 mm, poco para una rústica pegada. Si la encuadernación termina siendo a caballete, el pliego pasa a 16 y el libro tiene que llegar a 64 páginas.
+*Manual.* Están resueltos la cubierta aparte, con lomo y demasía, y el negro del texto en 100 % K. Faltan la conversión a CMYK con prueba de color, porque las 23 imágenes siguen en RGB, y las especificaciones de papel y encuadernación con la imprenta.
 
 ### 10. Derechos y aspectos legales — Suficiente (2)
 
 *Automático (0,5).* No hay ISBN (0). La leyenda de la Ley 11.723 está (0,5).
 
-*Manual.* La licencia está marcada como pendiente («a definir con la autora»), así que sigue sin nombrarse. El ISBN está en trámite. No hay constancia del consentimiento de la autora ni de los vecinos nombrados, ni documentación sobre el origen de las láminas.
+*Manual.* No hubo cambios. La licencia sigue pendiente («a definir con la autora»), el ISBN está en trámite y no hay constancia del consentimiento de la autora ni de los vecinos nombrados, ni del origen de las láminas.
 
 ## 5. Nota analítica
 
-**74,64 / 100.**
+**78,57 / 100.**
 
 ## 6. Nota holística
 
-**78 / 100.**
+**80 / 100.**
 
-Lo mejor del libro sigue siendo que se oye el cuadernillo, y ahora además se puede confiar en él casi en todo. Las láminas corregidas sirven para reconocer en el campo, las plantas activas tienen su advertencia y la nota explica con honestidad qué se dejó afuera y por qué. Lo que más lo perjudica es que todavía no está terminado. Los recuadros amarillos de «pendiente» en créditos y colofón saldrían impresos, las páginas a medio llenar del capítulo 5 se ven apenas se hojea, y la ficha del algarrobo recomienda justo lo que la nota promete haber quitado. Eso pesa menos que las fallas de la versión anterior, porque ya no engaña al lector sobre qué planta tiene enfrente. Pero todavía no es un libro que una editorial mandaría así a imprenta.
+Por primera vez el libro no se contradice: lo que la nota de lectura promete, las fichas lo cumplen, y las plantas peligrosas se presentan como tales en la caja, en la nota y en el índice. Se oye el cuadernillo, las láminas sirven para reconocer en el campo y el atamisqui ya se puede identificar. Lo que más lo perjudica es que no está terminado. Los recuadros amarillos de créditos y colofón saldrían impresos, el capítulo 5 tiene páginas a medio llenar y algunas fichas todavía afirman como hechos lo que es tradición. Eso pesa, pero afecta la forma y el matiz, no la confianza: un lector que lleve este libro al monte no corre riesgo por seguirlo.
 
 ## 7. Divergencia
 
-No hay: 3,4 puntos de diferencia.
+No hay: 1,43 puntos de diferencia.
 
 ## 8. Veredicto
 
-**Requiere otra ronda de corrección y una nueva evaluación.** No se da ninguna condición excluyente. La nota analítica de 74,64 queda a 0,36 del umbral de «apto con correcciones menores».
+**Apto con correcciones menores, que no requieren otra ronda de evaluación.** No se da ninguna condición excluyente. La nota analítica de 78,57 cruza el umbral de 75.
 
-Las dos correcciones que más pesan en la nota son de una línea cada una:
+Las correcciones menores son estas:
 
-- Quitar los lavados oculares del algarrobo o ponerles advertencia, y alinear la liga entre índice, caja y nota de lectura. Eso deja seguridad en 5.
-- Completar el colofón y las dos referencias sin año. Eso deja el aparato en 3 o 4.
+- **Los `\pendiente` de la p. iv y del colofón.** Son la corrección obligatoria: sin licencia nombrada, sin ISBN y sin datos de impresión, el PDF no puede salir tal como está, aunque completarlos no cambie la evaluación.
+- **La resolución de las láminas 15 y 16.** Hay que volver a exportarlas a 1792 × 2400 o más.
+- **Tres frases de seguridad:** la salvedad del molle para adelgazar, la caja del llantén en el oído y el aviso cardíaco del cedrón.
+- **El epígrafe de la lámina 14 y las dos referencias sin año.**
 
-Aparte de la nota, los `\pendiente` amarillos impiden por sí solos mandar el PDF actual a imprenta.
+Los blancos del capítulo 5 y la página 26 son lo que más se ve al hojear. No bloquean la impresión, pero son lo próximo que conviene resolver si hay tiempo.
