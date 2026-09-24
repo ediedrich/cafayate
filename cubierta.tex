@@ -23,6 +23,15 @@
 \usepackage{mathpazo}
 \renewcommand{\sfdefault}{pag}
 \usepackage[cmyk]{xcolor}
+% Láminas en CMYK y perfil de salida (OutputIntent), generados por cmyk.py.
+\IfFileExists{perfil-salida.tex}{%
+  \newcommand{\carpetaimg}{img-cmyk}%
+  \input{perfil-salida}%
+}{%
+  \newcommand{\carpetaimg}{img}%
+  \PackageWarningNoLine{cubierta}{Falta perfil-salida.tex: correr
+    "py cmyk.py" antes de compilar}%
+}
 \usepackage{graphicx}
 \usepackage{tikz}
 \usetikzlibrary{fadings}
@@ -61,7 +70,7 @@
   \begin{scope}[shift={(O)}]
     \clip (0,0) rectangle (\anchopanel,\altototal);
     \node[anchor=center, inner sep=0] at (\anchopanel/2,\altototal/2)
-      {\includegraphics[width=\anchopanel mm]{img/23-contratapa.jpg}};
+      {\includegraphics[width=\anchopanel mm]{\carpetaimg/23-contratapa.jpg}};
     \fill[verdehuerta, opacity=0.72] (0,\altototal) rectangle (\anchopanel,\altototal-\demasia-120);
     \fill[verdehuerta, opacity=0.72, path fading=south]
       (0,\altototal-\demasia-120) rectangle (\anchopanel,\altototal-\demasia-165);
@@ -99,7 +108,7 @@
   \begin{scope}[shift={(O)}]
     \clip (\xtapa,0) rectangle (\anchototal,\altototal);
     \node[anchor=center, inner sep=0] at ({\xtapa+\anchopanel/2},\altototal/2)
-      {\includegraphics[width=\anchopanel mm]{img/01-cubierta.jpg}};
+      {\includegraphics[width=\anchopanel mm]{\carpetaimg/01-cubierta.jpg}};
     \fill[verdehuerta, opacity=0.74, path fading=south]
       (\xtapa,\altototal) rectangle (\anchototal,\altototal-\demasia-106);
     \fill[verdehuerta, opacity=0.88]

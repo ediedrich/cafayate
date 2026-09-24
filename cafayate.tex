@@ -64,6 +64,23 @@
 \usepackage{pgfornament}
 \usepackage[hidelinks]{hyperref}
 
+% ------------------------- Color de imprenta --------------------------
+% Con imprenta=true las láminas salen de img-cmyk/ (convertidas por
+% cmyk.py) y el PDF declara su perfil de salida (OutputIntent). Si
+% todavía no se corrió cmyk.py, usa las láminas RGB de img/ y avisa.
+\ifimprenta
+  \IfFileExists{perfil-salida.tex}{%
+    \newcommand{\carpetaimg}{img-cmyk}%
+    \input{perfil-salida}%
+  }{%
+    \newcommand{\carpetaimg}{img}%
+    \PackageWarningNoLine{cafayate}{Falta perfil-salida.tex: correr
+      "py cmyk.py" antes de compilar para imprenta}%
+  }
+\else
+  \newcommand{\carpetaimg}{img}
+\fi
+
 % Sin viudas ni huérfanas: el último renglón de un párrafo nunca queda
 % solo arriba de una página (pasaba al pegar las cajas a su texto), y el
 % primero nunca queda solo al pie.
@@ -350,7 +367,7 @@
 \begin{titlepage}
 \thispagestyle{empty}
 \AddToShipoutPictureBG*{%
-  \put(0,0){\includegraphics[width=\paperwidth,height=\paperheight]{img/01-cubierta.jpg}}}
+  \put(0,0){\includegraphics[width=\paperwidth,height=\paperheight]{\carpetaimg/01-cubierta.jpg}}}
 \begin{tikzpicture}[remember picture, overlay]
   \fill[verdehuerta, opacity=0.74, path fading=south]
         (current page.north west) rectangle
@@ -559,7 +576,7 @@ nuestra madre va a tener que cerrar la botica.
 \end{flushright}
 \cierre
 
-\laminapagina{img/02-frontispicio.jpg}{%
+\laminapagina{\carpetaimg/02-frontispicio.jpg}{%
   «La enfermedad es un desencuentro entre nuestros cuerpos y nuestras
   almas. Aparece cuando nos volvemos sordos a la voz interior.»
   \\ Edward Bach}
@@ -568,7 +585,7 @@ nuestra madre va a tener que cerrar la botica.
 \mainmatter
 \parteconlamina{La botica a un kilómetro a la redonda}
   {La botica\\ a un kilómetro a la redonda}
-  {img/03-parte1-apertura.jpg}{%
+  {\carpetaimg/03-parte1-apertura.jpg}{%
   La Quebrada de Cafayate al amanecer. Entre los cerros colorados y el
   cauce seco crece una farmacia entera.}
 
@@ -585,7 +602,7 @@ alcaloides. Esos
 compuestos son su defensa, y son también lo que buscamos cuando la
 usamos.
 
-\lamina[0.85\textwidth]{img/04-botica-kilometro.jpg}{%
+\lamina[0.85\textwidth]{\carpetaimg/04-botica-kilometro.jpg}{%
   El kilómetro a la redonda: la idea que organiza este libro. Lo que
   crece cerca es lo que está adaptado al clima, la altura y la humedad
   del lugar donde vivimos.}
@@ -638,7 +655,7 @@ parte del método, no una debilidad.
 
 \section{Secado y guardado}
 
-\lamina{img/05-cosecha-secado.jpg}{%
+\lamina{\carpetaimg/05-cosecha-secado.jpg}{%
   Manojos secándose a la sombra. El sol directo destruye en dos días los
   aceites esenciales que tardaron una temporada en formarse.}
 
@@ -665,7 +682,7 @@ lo que está encerrado en cortezas y raíces; el alcohol, las resinas y
 los aceites esenciales; la grasa, lo que debe quedarse en la piel.
 Elegir bien la preparación es la mitad del resultado.
 
-\lamina{img/06-preparaciones-infusion.jpg}{%
+\lamina{\carpetaimg/06-preparaciones-infusion.jpg}{%
   Infusión, decocción y cataplasma: tres maneras distintas de pedirle a
   la planta lo que tiene.}
 
@@ -725,7 +742,7 @@ y la bebida plus.
 \end{pasos}
 \end{practica}
 
-\lamina{img/07-tintura-madre.jpg}{%
+\lamina{\carpetaimg/07-tintura-madre.jpg}{%
   Maceración en curso y tinturas ya coladas, en frascos ámbar
   etiquetados con nombre y fecha.}
 
@@ -761,7 +778,7 @@ contienen sustancias tóxicas y no sirven para nada que vaya al cuerpo.
 % =====================================================================
 \parteconlamina{Las plantas de la quebrada}
   {Las plantas de la quebrada}
-  {img/08-parte2-apertura.jpg}{%
+  {\carpetaimg/08-parte2-apertura.jpg}{%
   El monte quebradeño: algarrobos, chañares, jarillas y tuscas sobre
   suelo arenoso.}
 
@@ -774,7 +791,7 @@ hacen de árbol— son pocos y valen por muchos.
 Dan sombra, comida, leña, madera, tintura y remedio, y varias
 generaciones organizaron su año alrededor de cuándo florece cada uno.
 
-\laminadiferida{img/09-algarrobo.jpg}{%
+\laminadiferida{\carpetaimg/09-algarrobo.jpg}{%
   Algarrobo (\textit{Prosopis} spp.): porte, flor en racimo, vaina
   madura y detalle de la resina del tronco.}
 
@@ -809,7 +826,7 @@ azúcar quemada con una brasa, que le quita el amargor. El arrope, el
 dulce que resulta de la cocción del fruto, se toma también para la garganta.
 \end{planta}
 
-\laminadiferida{img/10-chanar.jpg}{%
+\laminadiferida{\carpetaimg/10-chanar.jpg}{%
   Chañar (\textit{Geoffroea decorticans}): corteza descascarada,
   floración amarilla y fruto maduro.}
 
@@ -835,7 +852,7 @@ por el peso.
 \end{cuidado}
 \end{planta}
 
-\laminadiferida{img/11-molle.jpg}{%
+\laminadiferida{\carpetaimg/11-molle.jpg}{%
   Molle (\textit{Schinus molle}): hoja compuesta y racimo de frutos
   rosados, la «falsa pimienta».}
 
@@ -888,7 +905,7 @@ debe hacerse con acompañamiento médico.
 \end{cuidado}
 \end{planta}
 
-\lamina[0.74\textwidth]{img/16-lamina-arboles-espinosos.jpg}{%
+\lamina[0.74\textwidth]{\carpetaimg/16-lamina-arboles-espinosos.jpg}{%
   Tusca, atamisqui y sombra de toro: los tres que cierran el capítulo
   del monte.}
 
@@ -898,7 +915,7 @@ debe hacerse con acompañamiento médico.
 \chapter{Los arbustos resinosos}
 \epigrafe{Al ser muy resinosa levanta\\ la temperatura corporal.}{CUADERNILLO ORIGINAL}
 
-\lamina{img/20-monte-panoramica.jpg}{%
+\lamina{\carpetaimg/20-monte-panoramica.jpg}{%
   El jarillal: kilómetros de arbustos resinosos que perfuman el aire
   después de la lluvia.}
 
@@ -907,7 +924,7 @@ aromáticas, cargadas de resina. Casi todas trabajan sobre el mismo
 terreno —el dolor muscular, el reuma, la circulación— y casi todas se
 usan más por fuera que por dentro.
 
-\laminadiferida{img/12-jarilla.jpg}{%
+\laminadiferida{\carpetaimg/12-jarilla.jpg}{%
   Jarilla (\textit{Larrea} \spp): tallos plateados, hoja pequeña
   resinosa y flor amarilla.}
 
@@ -985,7 +1002,7 @@ infancia.
 \end{cuidado}
 \end{planta}
 
-\lamina[0.82\textwidth]{img/17-lamina-resinosas.jpg}{%
+\lamina[0.82\textwidth]{\carpetaimg/17-lamina-resinosas.jpg}{%
   Chilca, retama y cepa caballo, los tres arbustos del suelo removido.}
 
 \cierre
@@ -1094,10 +1111,10 @@ Tampoco se usa durante el embarazo.
 \end{cuidado}
 \end{planta}
 
-\lamina[0.74\textwidth]{img/13-lamina-aromaticas.jpg}{%
+\lamina[0.74\textwidth]{\carpetaimg/13-lamina-aromaticas.jpg}{%
   Cedrón, incayuyo y salvia mora: las tres aromáticas de la casa.}
 
-\laminapagina{img/14-lamina-digestivas.jpg}{%
+\laminapagina{\carpetaimg/14-lamina-digestivas.jpg}{%
   Arcayuyo y marrubio, dos yuyos del estómago: uno dulce y otro amargo.}
 
 \cierre
@@ -1174,7 +1191,7 @@ conozca bien, por períodos cortos.
 \end{cuidado}
 \end{planta}
 
-\lamina[0.6\textwidth]{img/15-lamina-cicatrizantes.jpg}{%
+\lamina[0.6\textwidth]{\carpetaimg/15-lamina-cicatrizantes.jpg}{%
   Llantén, cola de caballo y paico: la roseta, el tallo hueco y la
   espiga dentada.}
 
@@ -1197,7 +1214,7 @@ oncológico.
 \end{cuidado}
 \end{planta}
 
-\lamina[0.56\textwidth]{img/18-liga-muerdago.jpg}{%
+\lamina[0.56\textwidth]{\carpetaimg/18-liga-muerdago.jpg}{%
   La liga instalada sobre su hospedante, con sus frutos translúcidos.}
 
 \cierre
@@ -1213,7 +1230,7 @@ tiene que poder identificarlas. No hay acá ninguna preparación, ninguna
 dosis y ninguna indicación: para estas dos, la información útil es
 exactamente dónde no meter la mano.
 
-\laminadiferida{img/19-lamina-toxicas.jpg}{%
+\laminadiferida{\carpetaimg/19-lamina-toxicas.jpg}{%
   Chamico y palán palán. Las dos se reconocen fácil una vez que se las
   vio: conviene mirarlas con atención y no volver a tocarlas.}
 
@@ -1388,7 +1405,7 @@ el agradecimiento principal.
   \item[] \textit{Plants of the World Online} (POWO). Royal Botanic Gardens, Kew. \url{https://powo.science.kew.org}
 \end{description}
 
-\lamina{img/21-mate-cedron.jpg}{%
+\lamina{\carpetaimg/21-mate-cedron.jpg}{%
   El uso más frecuente de todos: unas hojas en el mate, todos los días,
   sin pensar en que eso también es medicina.}
 
@@ -1418,7 +1435,7 @@ ejemplares.
   {\color{verdehoja}\pgfornament[width=3.2cm]{71}}
 \end{center}
 
-\laminapagina{img/22-cierre-canasto.jpg}{%
+\laminapagina{\carpetaimg/22-cierre-canasto.jpg}{%
   Lo recolectado en una mañana: manojos, cortezas y flores de un
   kilómetro a la redonda.}
 
@@ -1428,7 +1445,7 @@ ejemplares.
 \clearalapar
 \thispagestyle{empty}
 \AddToShipoutPictureBG*{%
-  \put(0,0){\includegraphics[width=\paperwidth,height=\paperheight]{img/23-contratapa.jpg}}}
+  \put(0,0){\includegraphics[width=\paperwidth,height=\paperheight]{\carpetaimg/23-contratapa.jpg}}}
 \begin{tikzpicture}[remember picture, overlay]
   \fill[verdehuerta, opacity=0.64]
         (current page.north west) rectangle
