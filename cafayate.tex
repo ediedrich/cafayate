@@ -22,6 +22,23 @@
 \newif\ifimprenta
 \imprentatrue
 
+% ------------------ Datos que completa la editorial ------------------
+% Editorial Juana Manuela completa estos datos y gestiona el ISBN.
+% Mientras un dato esté vacío, el libro lo imprime en un recuadro
+% amarillo y la compilación avisa cuántos faltan. Detalle de cada uno
+% en PENDIENTES-editorial.md.
+\def\datoSello{}          % pie editorial, p. ej.: Editorial Juana Manuela, Salta
+\def\datoISBN{}           % p. ej.: 978-987-XXXX-XX-X
+\def\datoFechaImpresion{} % p. ej.: noviembre de 2026
+\def\datoImprenta{}       % p. ej.: Imprenta X, Salta
+\def\datoPapel{}          % p. ej.: obra de 90 g/m²
+\def\datoTapas{}          % p. ej.: cartulina ilustración de 300 g/m², laminado mate
+\def\datoTirada{}         % p. ej.: 500
+% La autora confirmó la licencia CC BY-NC-SA 4.0 de la p. iv: pasar a
+% \licenciaconfirmadatrue (y, si eligió otra, cambiar el texto).
+\newif\iflicenciaconfirmada
+\licenciaconfirmadafalse
+
 % ------------------------- Idioma y tipografía -----------------------
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
@@ -247,6 +264,15 @@
 % para que no llegue a imprenta sin que nadie lo vea.
 \newcommand{\pendiente}[1]{{\setlength{\fboxsep}{1.5pt}\colorbox{yellow}{\color{black}\sffamily\footnotesize #1}}}
 
+% \dato\datoX{texto}: imprime \datoX, o el texto en recuadro amarillo si
+% \datoX está vacío, y lo cuenta como faltante.
+\newcounter{faltantes}
+\newcommand{\faltante}[1]{\stepcounter{faltantes}\pendiente{#1}}
+\newcommand{\dato}[2]{\ifx#1\empty\faltante{#2}\else#1\fi}
+\AtEndDocument{\ifnum\value{faltantes}>0
+  \PackageWarningNoLine{cafayate}{Faltan \the\value{faltantes} datos
+    editoriales (recuadros amarillos). Ver PENDIENTES-editorial.md}\fi}
+
 % Imagen a caja completa con epígrafe
 \newcommand{\lamina}[3][\textwidth]{%
   \begin{figure}[htbp]\centering
@@ -429,7 +455,8 @@
 \noindent{\footnotesize\setlength{\parindent}{0pt}\raggedright
 \textsf{\textbf{Yuyos de la Quebrada de Cafayate}}\par
 \vspace{0.5em}
-Edición ilustrada. Edición de autor, \the\year.\par
+Edición ilustrada, \the\year.\par
+\dato\datoSello{Pie editorial: lo define la editorial}\par
 \vspace{0.9em}
 \copyright{} María Eugenia Orellana, \the\year.\par
 \vspace{0.9em}
@@ -440,7 +467,8 @@ Quebrada de Cafayate.\par
 Ilustraciones: Eduardo Diedrich.\par
 Diseño y composición tipográfica: Eduardo Diedrich.\par
 \vspace{0.9em}
-% Licencia: CC BY-NC-SA 4.0, la misma de El Balcón. Confirmar con la autora.
+% Licencia: CC BY-NC-SA 4.0, la misma de El Balcón. Se confirma con
+% \licenciaconfirmadatrue en el preámbulo.
 Esta obra se publica bajo una licencia Creative Commons
 Atribución-NoComercial-CompartirIgual 4.0 Internacional
 (CC~BY-NC-SA~4.0): se permite y se agradece su reproducción total o
@@ -449,8 +477,11 @@ fuente y que las obras derivadas se compartan con la misma licencia.
 Texto de la licencia:
 \url{https://creativecommons.org/licenses/by-nc-sa/4.0/deed.es}. El
 monte, como el conocimiento, se cuida compartiéndolo.\par
+\iflicenciaconfirmada\else
+\faltante{Licencia a confirmar con la autora}\par
+\fi
 \vspace{0.9em}
-% ISBN 978-...\par   % <- cuando se tramite
+ISBN \dato\datoISBN{en trámite, a cargo de Editorial Juana Manuela}\par
 Queda hecho el depósito que marca la Ley 11.723.\par
 \vspace{0.9em}
 Impreso en Argentina.\par
@@ -1446,10 +1477,13 @@ una planta.
 \vspace{0.8em}
 \noindent Se compuso en Palatino (URW Palladio) para el texto y Avant
 Garde Gothic (URW Gothic) para los títulos.
-% --- Datos de impresión: completar cuando se contrate la imprenta ---
-% Se terminó de imprimir en [MES] de [AÑO] en [IMPRENTA], [CIUDAD], sobre
-% papel [PAPEL INTERIOR] de [GRAMAJE] g/m², con tapas en [CARTULINA].
-% Tirada: [N] ejemplares.
+
+\vspace{0.8em}
+\noindent Se terminó de imprimir en
+\dato\datoFechaImpresion{mes y año} en \dato\datoImprenta{imprenta,
+ciudad}, sobre papel \dato\datoPapel{papel y gramaje del interior}, con
+tapas en \dato\datoTapas{cartulina de tapas}. Tirada:
+\dato\datoTirada{cantidad} ejemplares.
 
 \vspace{2.2em}
 \begin{center}
