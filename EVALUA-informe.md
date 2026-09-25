@@ -2,7 +2,7 @@
 
 ## 1. Encabezado
 
-- **Commit evaluado:** `36c4916` (rama `main`, 25/09/2026 20:19 −03).
+- **Commit evaluado:** `aef1c82` (rama `main`, 25/09/2026 20:27 −03).
 - **Fecha:** 25 de septiembre de 2026.
 - **Evaluó:** Claude (Anthropic), a pedido de Eduardo Diedrich.
 - **Material leído:**
@@ -10,17 +10,11 @@
   - `cafayate.pdf` y `cubierta.pdf` commiteados (interior de 60 págs.);
   - las 23 láminas de `img/` y de `img-cmyk/`.
 
-**Nota de método.** El repositorio sigue sin `evalua.py`. Calculé los puntajes automáticos con los mismos criterios que en las evaluaciones anteriores. Esta vez compilé el fuente desde un **clon limpio con el paquete de español de babel instalado**, sin el parche de `\babelprovide`: compila sin errores y el control de renglones desbordados ya no es aproximado. El texto del PDF commiteado es idéntico al del que produce el fuente. Las páginas se citan por el folio impreso.
+**Nota de método.** El repositorio sigue sin `evalua.py`. Calculé los puntajes automáticos con los mismos criterios que en las evaluaciones anteriores. Compilé interior y cubierta desde un clon limpio con el paquete de español de babel instalado: los dos compilan sin errores y sin *overfull hbox*. El texto del interior compilado es idéntico al del PDF commiteado. Las páginas se citan por el folio impreso.
 
-**Mensaje de commit.** El de `36c4916` describe bien lo que hace. Se corrigió lo que señalaba la evaluación anterior.
+**Mensaje de commit.** Describe con exactitud lo que hace y remite a la evaluación que lo pidió.
 
-**Qué cambió desde `99dc262`** (todo en `36c4916`):
-
-- Los datos editoriales pasan a un solo archivo, `datos-editorial.tex`, que leen el interior y la cubierta.
-- Entra al repositorio `PENDIENTES-editorial.md`, con cada dato, quién lo da y qué decide la autora.
-- La cubierta suma al sistema de faltantes el espesor de hoja, el código de barras del ISBN y el sello de la editorial («Faltan 3 datos editoriales»).
-- Texto: «aguaribay» en el molle (p. 15); atribuciones del cedrón (p. 27) y del llantén (p. 33) reescritas; fecha de consulta de los sitios en la bibliografía (p. 43).
-- Solo cambian esas cuatro páginas del interior; la paginación se mantiene.
+**Qué cambió desde `36c4916`.** Una sola línea de `cubierta.tex`: el aviso del lomo provisorio usa `\pgfmathprintnumber[fixed,precision=1,use comma]` y ahora dice «Lomo provisorio de 3,3 mm: falta el espesor de hoja», con coma decimal y espacio fino antes de la unidad. Lo verifiqué en el `cubierta.pdf` commiteado y en el compilado. `cafayate.tex` y `datos-editorial.tex` no cambian, y el interior tampoco.
 
 ## 2. Condiciones excluyentes
 
@@ -64,10 +58,13 @@ Evaluaciones anteriores:
 | `0a5014b` | 86,96 | 88 | Apto con correcciones menores |
 | `99dc262` | 86,96 | 89 | Apto con correcciones menores |
 | `36c4916` | 87,96 | 89 | Apto con correcciones menores |
+| `aef1c82` | 87,96 | 89 | Apto con correcciones menores |
 
-Sube un punto, en redacción. Lo demás de esta ronda ordena y documenta lo pendiente, pero no completa ningún dato, y los niveles de aparato, preimpresión y derechos dependen de esos datos.
+Las notas no cambian. La corrección del lomo era técnica y no alcanzaba para mover el nivel de preimpresión, que depende de los datos de la imprenta.
 
 ## 4. Observaciones por dimensión
+
+Fuera de la cubierta, el material evaluado es idéntico al de `36c4916`: el interior no cambió en ningún carácter. Las observaciones de las dimensiones 1 a 8 y 10 se mantienen tal como quedaron en esa ronda, incluidas las menciones a lo que se resolvió entonces. Solo cambia la dimensión 9.
 
 ### 1. Contenido, fidelidad y estructura — Excelente (12)
 
@@ -138,9 +135,7 @@ El nivel no cambia porque el colofón (p. 45) sigue **sin datos de impresión**,
 
 *Automático (5).* Siete fuentes Type 1 incrustadas, sin Type 3 (1); 60 páginas, múltiplo de 4 (1); 17 × 24 cm en todas (1); sin láminas a sangre en el interior (1); *OutputIntent* presente (1).
 
-*Manual.* La cubierta entra al sistema de faltantes, como se pedía: el hueco del código de barras, el sello en la contratapa y el lomo provisorio se ven en amarillo y la compilación avisa «Faltan 3 datos editoriales». `PENDIENTES-editorial.md` además aclara que con 60 páginas el lomo no alcanza para imprimir título, algo que conviene que la editorial sepa antes de encargar el diseño final.
-
-Hay un defecto nuevo en el aviso del lomo: dice **«Lomo provisorio de 3.29999 mm»**, con punto decimal y sin redondear, porque `\pgfmathsetmacro` guarda el resultado en coma flotante. Es un aviso provisorio y desaparece al cargar el espesor, pero si alguien lo lee en voz alta con la imprenta, el dato sale mal.
+*Manual.* Se resolvió el defecto señalado en la ronda anterior: el aviso del lomo dice **«Lomo provisorio de 3,3 mm»**, redondeado y con coma, y entra en su recuadro sin tocar el sello ni el código de barras. La cubierta sigue avisando «Faltan 3 datos editoriales» y el interior «Faltan 8».
 
 El nivel no sube porque siguen faltando papel, encuadernación y tirada acordados con la imprenta, el espesor de hoja real y la prueba de color.
 
@@ -160,7 +155,7 @@ El nivel no cambia porque nada de eso está hecho todavía: la licencia sigue «
 
 **89 / 100.**
 
-El libro sigue siendo confiable de punta a punta: todo lo que dice de las plantas está en boca de la tradición, las cajas protegen sin asustar, las láminas sirven para reconocer en el campo y se oye el cuadernillo. Esta ronda lo mejora donde se lee —el cedrón y el llantén ya no suenan a fórmula, el molle recupera su «aguaribay»— y lo ordena donde se produce: un solo archivo de datos, un documento que dice quién da cada uno, y una cubierta que ya no puede salir con huecos sin que alguien lo vea. Lo que lo separa de lo que una editorial exigente imprimiría tal como está no cambió: la licencia sin confirmar, el contrato de edición, el ISBN y los datos de imprenta. Pesan más que todo lo demás porque sin ellos el libro no puede salir, aunque no toquen una sola página de contenido.
+El libro sigue siendo confiable de punta a punta: todo lo que dice de las plantas está en boca de la tradición, las cajas protegen sin asustar, las láminas sirven para reconocer en el campo y se oye el cuadernillo. Esta ronda no toca una sola página del interior: corrige el único defecto técnico que había dejado la anterior, el aviso del lomo, que ahora dice «3,3 mm» y ya no puede leerse mal en una conversación con la imprenta. Lo que separa el libro de lo que una editorial exigente imprimiría tal como está sigue siendo lo mismo: la licencia sin confirmar, el contrato de edición, el ISBN y los datos de imprenta. Pesan más que todo lo demás porque sin ellos el libro no puede salir, aunque no toquen el contenido.
 
 ## 7. Divergencia
 
@@ -176,7 +171,5 @@ Del lado del libro ya no queda nada que impida imprimir. Lo que falta está list
 - **Contrato de edición** que cubra la venta, el ISBN y el depósito legal.
 - **Cargar los datos** de `datos-editorial.tex` y el código de barras, y revisar el colofón y la contratapa compuestos con los datos reales.
 - **Prueba de color** de las láminas sobre el papel elegido.
-
-Una corrección técnica, en `cubierta.tex`: redondear el ancho del lomo que se imprime en el aviso (por ejemplo, con `\pgfmathprintnumber[fixed,precision=1,use comma]{\lomo}`) para que diga «3,3 mm».
 
 Opcional, en el texto: engordar chamico y palán palán, y revisar los tres versos en blanco del cuerpo.
