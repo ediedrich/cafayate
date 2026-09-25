@@ -123,7 +123,7 @@
     % Aviso de lomo provisorio (solo mientras falte el espesor de hoja)
     \ifespesorprovisorio
       \node[anchor=south east, inner sep=0] at (\demasia+\anchotapa-12,\demasia+22)
-        {\faltante{Lomo provisorio de \lomo\ mm: falta el espesor de hoja}};
+        {\faltante{Lomo provisorio de \pgfmathprintnumber[fixed,precision=1,use comma]{\lomo}\,mm: falta el espesor de hoja}};
     \fi
   \end{scope}
 
