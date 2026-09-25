@@ -23,21 +23,10 @@
 \imprentatrue
 
 % ------------------ Datos que completa la editorial ------------------
-% Editorial Juana Manuela completa estos datos y gestiona el ISBN.
-% Mientras un dato esté vacío, el libro lo imprime en un recuadro
-% amarillo y la compilación avisa cuántos faltan. Detalle de cada uno
+% Sello, ISBN, licencia, imprenta, papel, tapas y tirada están en
+% datos-editorial.tex, que lee también la cubierta. Detalle de cada dato
 % en PENDIENTES-editorial.md.
-\def\datoSello{}          % pie editorial, p. ej.: Editorial Juana Manuela, Salta
-\def\datoISBN{}           % p. ej.: 978-987-XXXX-XX-X
-\def\datoFechaImpresion{} % p. ej.: noviembre de 2026
-\def\datoImprenta{}       % p. ej.: Imprenta X, Salta
-\def\datoPapel{}          % p. ej.: obra de 90 g/m²
-\def\datoTapas{}          % p. ej.: cartulina ilustración de 300 g/m², laminado mate
-\def\datoTirada{}         % p. ej.: 500
-% La autora confirmó la licencia CC BY-NC-SA 4.0 de la p. iv: pasar a
-% \licenciaconfirmadatrue (y, si eligió otra, cambiar el texto).
-\newif\iflicenciaconfirmada
-\licenciaconfirmadafalse
+\input{datos-editorial}
 
 % ------------------------- Idioma y tipografía -----------------------
 \usepackage[utf8]{inputenc}
@@ -871,7 +860,8 @@ dulce que resulta de la cocción del fruto, se toma también para la garganta.
 Árbol grande y ramificado, de cinco a siete metros, tronco rugoso y
 nudoso, copa amplia y hojas compuestas. Da un fruto rojo púrpura que al
 aplastarse despide un aroma dulce a pimienta, de ahí su nombre de falsa
-pimienta. Los antiguos lo llamaban «sanalotodo». La tradición destaca sobre todo
+pimienta. También se lo llama aguaribay, y los antiguos lo llamaban
+«sanalotodo». La tradición destaca sobre todo
 su uso antirreumático: la tintura, maceración de hojas en alcohol, se
 usa en fricciones, igual que las hojas y flores en cataplasma caliente
 sobre dolores musculares. Se lo usa además como depurativo de la
@@ -1056,10 +1046,10 @@ los dos mismos territorios: la digestión y el ánimo.
 Planta muy perfumada, de aroma a limón, de alrededor de un metro de
 altura, con hojas pequeñas y lanceoladas de color verde claro, dispuestas
 de a tres o cuatro alrededor del tallo. En infusión se usa como tónico
-estomacal, sedante y carminativo. La tradición lo usa como
-antidepresivo suave, para aliviar jaquecas y fiebres, y lo recomienda para
-el insomnio y los estados de ansiedad. Se le atribuyen propiedades
-cardiotónicas, y en el valle se lo toma para las palpitaciones. En
+estomacal, sedante y carminativo. Es el yuyo al que se recurre para
+levantar el ánimo, aliviar jaquecas y fiebres, dormir mejor y calmar la
+ansiedad. Tiene además fama de fortalecer el corazón, y en el valle se
+lo toma para las palpitaciones. En
 cocimiento, usado localmente, se lo emplea para el prurito, las alergias y los
 dolores reumáticos y neurálgicos.
 \begin{cuidado}[Palpitaciones: primero el médico]
@@ -1165,16 +1155,15 @@ Hierba que se abre en roseta, de hojas lanceoladas y ovales con
 nervaduras marcadas y flores en espigas. Como cataplasma se usa para
 quemaduras y úlceras. Las infusiones se usan para limpiar riñones,
 intestino y vejiga, y para los dolores de garganta. En la tos, la
-bronquitis, la laringitis y la faringitis se la usa porque se le
-atribuyen propiedades antibacterianas, descongestionantes y
-expectorantes. El jarabe se prepara machacando las
+bronquitis, la laringitis y la faringitis se la toma por su fama de
+antibacteriana, descongestionante y expectorante. El jarabe se prepara machacando las
 hojas, filtrando el líquido y disolviéndolo con azúcar a baño maría
 —con poco calor, porque el calor fuerte destruye las propiedades—; un
 par de cucharaditas al día, dice la tradición, alivian el dolor de las
-úlceras de estómago. La tradición le atribuye a la infusión propiedades
-hemostáticas: detener el sangrado tanto de cortaduras como de fístulas. Una hoja bien lavada
-se aplica sobre las heridas para detener el sangrado y ayudar a
-cicatrizar, y se le atribuye prevenir infecciones. Una gotita del jugo de hojas
+úlceras de estómago. A la infusión se la tiene por hemostática, capaz de
+detener el sangrado de cortaduras y de fístulas, y una hoja bien lavada
+se apoya sobre las heridas con el mismo fin, para ayudar a cicatrizar y,
+según dicen, prevenir infecciones. Una gotita del jugo de hojas
 machacadas se usa para el dolor de oídos. Se puede comer en ensalada: tiene
 vitaminas A, B1, C y calcio.
 \begin{cuidado}[Nada en el oído si supura]
@@ -1446,7 +1435,7 @@ el agradecimiento principal.
 \end{description}
 
 \vspace{0.6em}
-\noindent Sitios consultados:
+\noindent Sitios consultados en septiembre de 2026:
 
 \vspace{0.4em}
 \begin{description}[leftmargin=1.2em, style=sameline, font=\normalfont, itemsep=0.4em]

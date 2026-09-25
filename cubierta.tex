@@ -4,14 +4,14 @@
 %  Un solo pliego: contratapa | lomo | tapa, con 3 mm de demasía en
 %  todo el contorno. Compilar con:  pdflatex cubierta.tex
 %
-%  Antes de mandar a imprenta, confirmar con la imprenta los dos datos
-%  de abajo (páginas del interior y espesor de la hoja del papel
-%  elegido). El lomo se calcula solo.
+%  Las páginas del interior las actualiza Actualizar-Cafayate.ps1. El
+%  espesor de hoja, el sello y el código de barras del ISBN salen de
+%  datos-editorial.tex: mientras falten, la cubierta los marca en
+%  amarillo y la compilación avisa. El lomo se calcula solo.
 % =====================================================================
 
 % ------------------------------ Datos --------------------------------
 \def\paginas{60}          % páginas del interior (pdfinfo cafayate.pdf)
-\def\espesorhoja{0.11}    % mm por HOJA (dos páginas); pedirlo a la imprenta
 \def\demasia{3}           % mm
 \def\anchotapa{170}       % mm
 \def\altotapa{240}        % mm
@@ -35,6 +35,26 @@
 \usepackage{graphicx}
 \usepackage{tikz}
 \usetikzlibrary{fadings}
+
+% ----------------------- Datos de la editorial -----------------------
+\input{datos-editorial}
+\newcommand{\pendiente}[1]{{\setlength{\fboxsep}{1.5pt}\colorbox{yellow}{\color{black}\sffamily\footnotesize #1}}}
+\newcounter{faltantes}
+\newcommand{\faltante}[1]{\stepcounter{faltantes}\pendiente{#1}}
+\AtEndDocument{\ifnum\value{faltantes}>0
+  \PackageWarningNoLine{cubierta}{Faltan \the\value{faltantes} datos
+    editoriales (recuadros amarillos). Ver PENDIENTES-editorial.md}\fi}
+% Espesor de hoja: provisorio 0.11 mm mientras la imprenta no lo confirme.
+\newif\ifespesorprovisorio
+\ifx\datoEspesorHoja\empty
+  \def\espesorhoja{0.11}\espesorprovisoriotrue
+\else
+  \let\espesorhoja\datoEspesorHoja\espesorprovisoriofalse
+\fi
+% Código de barras del ISBN, si la editorial ya lo mandó.
+\def\barrasisbn{}
+\IfFileExists{codigo-barras-isbn.pdf}{\def\barrasisbn{codigo-barras-isbn.pdf}}{%
+  \IfFileExists{codigo-barras-isbn.png}{\def\barrasisbn{codigo-barras-isbn.png}}{}}
 
 % Lomo en mm, redondeado a décimas
 \pgfmathsetmacro{\lomo}{round(\paginas/2*\espesorhoja*10)/10}
@@ -87,9 +107,24 @@
         {\small\color{crema}\input{contratapa-texto}}\\[1.0em]
         {\sffamily\fontsize{8}{11}\selectfont\color{crema} VALLES CALCHAQUÍES · SALTA}
       \end{minipage}};
-    % Lugar del código de barras del ISBN (blanco, 50 x 30 mm)
+    % Código de barras del ISBN (50 x 30 mm, abajo a la izquierda)
     \fill[white] (\demasia+12,\demasia+12) rectangle (\demasia+62,\demasia+42);
-    \node[font=\sffamily\tiny, text=black] at (\demasia+37,\demasia+27) {ISBN / código de barras};
+    \ifx\barrasisbn\empty
+      \node[font=\sffamily\tiny, text=black] at (\demasia+37,\demasia+27)
+        {\faltante{Código de barras del ISBN}};
+    \else
+      \node[inner sep=0] at (\demasia+37,\demasia+27)
+        {\includegraphics[width=48mm,height=28mm,keepaspectratio]{\barrasisbn}};
+    \fi
+    % Sello de la editorial (abajo a la derecha)
+    \node[anchor=south east, inner sep=0, font=\sffamily\fontsize{8}{10}\selectfont, text=crema]
+      at (\demasia+\anchotapa-12,\demasia+14)
+      {\ifx\datoSello\empty\faltante{Sello de la editorial}\else\datoSello\fi};
+    % Aviso de lomo provisorio (solo mientras falte el espesor de hoja)
+    \ifespesorprovisorio
+      \node[anchor=south east, inner sep=0] at (\demasia+\anchotapa-12,\demasia+22)
+        {\faltante{Lomo provisorio de \lomo\ mm: falta el espesor de hoja}};
+    \fi
   \end{scope}
 
   % ---------------- Lomo ----------------

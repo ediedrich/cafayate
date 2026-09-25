@@ -1,0 +1,39 @@
+% =====================================================================
+%  YUYOS DE LA QUEBRADA DE CAFAYATE — DATOS QUE COMPLETA LA EDITORIAL
+%
+%  Este es el único archivo que hace falta tocar para cerrar la edición.
+%  Lo leen cafayate.tex (página de créditos y colofón) y cubierta.tex
+%  (lomo, sello y código de barras).
+%
+%  Mientras un dato esté vacío, el PDF lo muestra en un recuadro
+%  amarillo y la compilación avisa cuántos faltan. Se completa
+%  escribiendo el dato entre las llaves, sin tocar nada más.
+%  Qué es cada dato y quién lo provee: PENDIENTES-editorial.md.
+% =====================================================================
+
+% ------------------------ Página de créditos (p. iv) -----------------
+\def\datoSello{}           % pie editorial. P. ej.: Editorial Juana Manuela, Salta
+\def\datoISBN{}            % con guiones. P. ej.: 978-987-XXXX-XX-X
+
+% La autora confirmó por escrito la licencia CC BY-NC-SA 4.0 de la p. iv:
+% cambiar \licenciaconfirmadafalse por \licenciaconfirmadatrue.
+% (Si eligió otra licencia, hay que cambiar además el texto de la p. iv.)
+\newif\iflicenciaconfirmada
+\licenciaconfirmadafalse
+
+% ------------------------------ Colofón (p. 45) ----------------------
+\def\datoFechaImpresion{}  % P. ej.: noviembre de 2026
+\def\datoImprenta{}        % nombre y ciudad. P. ej.: Imprenta X, Salta
+\def\datoPapel{}           % interior. P. ej.: obra de 90 g/m²
+\def\datoTapas{}           % P. ej.: cartulina ilustración de 300 g/m², laminado mate
+\def\datoTirada{}          % solo el número. P. ej.: 500
+
+% ------------------------------- Cubierta ----------------------------
+% Espesor de UNA hoja (dos páginas) del papel del interior, en mm y con
+% punto decimal. Lo da la imprenta. P. ej.: 0.11
+% Mientras esté vacío, el lomo se calcula con 0.11 mm, provisorio.
+\def\datoEspesorHoja{}
+
+% Código de barras del ISBN: lo genera la editorial. Guardarlo en la
+% carpeta del libro como codigo-barras-isbn.pdf (o .png), y la cubierta
+% lo ubica solo en su lugar de la contratapa (50 x 30 mm).
