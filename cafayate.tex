@@ -426,12 +426,12 @@
 
 % --- Créditos (verso de la portada) ---
 \null\vfill
-\noindent{\footnotesize\setlength{\parindent}{0pt}
+\noindent{\footnotesize\setlength{\parindent}{0pt}\raggedright
 \textsf{\textbf{Yuyos de la Quebrada de Cafayate}}\par
 \vspace{0.5em}
 Edición ilustrada. Edición de autor, \the\year.\par
 \vspace{0.9em}
-\copyright{} María Eugenia Orellana.\par
+\copyright{} María Eugenia Orellana, \the\year.\par
 \vspace{0.9em}
 Texto e investigación de campo: María Eugenia Orellana, a partir de su
 cuadernillo original y de las conversaciones con los vecinos de la
@@ -440,12 +440,17 @@ Quebrada de Cafayate.\par
 Ilustraciones: Eduardo Diedrich.\par
 Diseño y composición tipográfica: Eduardo Diedrich.\par
 \vspace{0.9em}
-Se permite y se agradece la reproducción total o parcial de esta obra
-con fines educativos y comunitarios, citando la fuente. El monte, como
-el conocimiento, se cuida compartiéndolo.\par
-\pendiente{Licencia: a definir con la autora (p.~ej., CC BY-NC-SA 4.0).}\par
+% Licencia: CC BY-NC-SA 4.0, la misma de El Balcón. Confirmar con la autora.
+Esta obra se publica bajo una licencia Creative Commons
+Atribución-NoComercial-CompartirIgual 4.0 Internacional
+(CC~BY-NC-SA~4.0): se permite y se agradece su reproducción total o
+parcial con fines educativos y comunitarios, siempre que se cite la
+fuente y que las obras derivadas se compartan con la misma licencia.
+Texto de la licencia:
+\url{https://creativecommons.org/licenses/by-nc-sa/4.0/deed.es}. El
+monte, como el conocimiento, se cuida compartiéndolo.\par
 \vspace{0.9em}
-ISBN: \pendiente{en trámite}\par
+% ISBN 978-...\par   % <- cuando se tramite
 Queda hecho el depósito que marca la Ley 11.723.\par
 \vspace{0.9em}
 Impreso en Argentina.\par
@@ -860,8 +865,8 @@ por el peso.
 \phantomsection\label{pl-tusca}%
 Árbol espinoso de tres a cuatro metros, de flores redonditas, amarillas
 y muy perfumadas, que inundan el monte durante la floración. La corteza
-en decocción es un desinfectante fuerte, muy usado por las mujeres en
-baños de asiento para tratar el flujo excesivo o anormal. La decocción
+en decocción tiene fama de desinfectante fuerte, y las mujeres la usan
+mucho en baños de asiento para tratar el flujo excesivo o anormal. La decocción
 de las hojas se usó tradicionalmente contra la sífilis, y la infusión de
 las mismas hojas se usa para los dolores musculares.
 \begin{cuidado}[La sífilis necesita antibióticos]
@@ -955,9 +960,9 @@ del riñón.
 \phantomsection\label{pl-chilca}%
 Arbusto que se multiplica densamente en el monte quebradeño, de varas
 largas y rectas color tostado claro y hojas lanceoladas verde brillante,
-pringosas y de perfume dulce. Al ser muy resinosa levanta la temperatura
-corporal, y por eso se usa en cataplasma para reumatismo, luxaciones y
-dolores musculares; activa la circulación. En infusión se usa como
+pringosas y de perfume dulce. Como es muy resinosa, dicen que levanta la
+temperatura corporal y activa la circulación, y por eso se usa en
+cataplasma para reumatismo, luxaciones y dolores musculares. En infusión se usa como
 antiparasitario, y de la misma forma se usa para el dolor de garganta,
 la tos y la bronquitis. La parte usada es siempre la hoja. El
 cuadernillo menciona además estudios realizados en México que señalan a
@@ -1078,14 +1083,14 @@ usa también para especies del género \textit{Salvia}, de flor azul, que
 son otras plantas: conviene confirmar cuál se tiene antes de usarla.
 La tradición la considera un excelente digestivo y un buen
 antiespasmódico. En forma tópica se usa para las hemorroides: se amortigua la
-hoja con la mano y se coloca. En infusión es sudorífica y emenagoga, y
-se la usa como descongestivo en la tos, la faringitis y la laringitis;
+hoja con la mano y se coloca. En infusión se la tiene por sudorífica y
+emenagoga, y se la usa como descongestivo en la tos, la faringitis y la laringitis;
 se le atribuye calmar el dolor y cicatrizar la garganta de
-manera casi inmediata. El tratamiento debe continuarse al menos tres o
-cuatro días, con infusiones tres veces por día.
+manera casi inmediata. Quienes la usan así la toman tres o cuatro
+días seguidos, tres veces por día.
 \begin{cuidado}[No en el embarazo]
-Por ser emenagoga, es decir, por estimular el flujo menstrual, la salvia
-mora no se usa durante el embarazo.
+Como se la tiene por emenagoga, es decir, que estimula el flujo
+menstrual, la salvia mora no se usa durante el embarazo.
 \end{cuidado}
 \end{planta}
 
@@ -1151,8 +1156,8 @@ chicos, el dolor de oído lo ve primero el médico.
 \begin{planta}{Cola de caballo}{Equisetum \spp}{Tallos}
 \phantomsection\label{pl-cola}%
 Planta de tallos largos y huecos, sin hojas ni flores, con ramitas
-secundarias que nacen de los nudos; crece cerca de los arroyos. Tiene
-propiedades cicatrizantes y astringentes, y es buena para limpiar
+secundarias que nacen de los nudos; crece cerca de los arroyos. En el valle
+se la tiene por cicatrizante y astringente, y con ella se limpian las
 heridas. Se la usa para la enuresis. Es rica en sales minerales como
 silicio y potasio, y contiene saponinas, flavonoides y alcaloides. Se
 usa como diurético y depurador de la sangre. Su riqueza en sílice está
@@ -1228,7 +1233,8 @@ oncológico.
 % ficha y el capítulo 7 se corre dos páginas. Una lámina apaisada (2,6:1)
 % ocupa así el ancho completo de la caja.
 \lamina[\textwidth,height=5cm,keepaspectratio]{\carpetaimg/18-liga-muerdago.jpg}{%
-  La liga sobre su hospedante: hojas gruesas y ovaladas, bayas rosadas.}
+  Liga (\textit{Phoradendron liga}): mata sobre su hospedante, hojas
+  gruesas y bayas rosadas.}
 
 \cierre
 
@@ -1426,7 +1432,8 @@ el agradecimiento principal.
 \addcontentsline{toc}{chapter}{Colofón}
 \markboth{Colofón}{}
 
-\noindent Este libro se terminó de componer a partir del cuadernillo
+\noindent Este libro se terminó de componer en septiembre de 2026, a
+partir del cuadernillo
 original \textit{Yuyos de la Quebrada de Cafayate}, escrito e
 investigado por \textsc{María Eugenia Orellana} en los Valles
 Calchaquíes.
@@ -1438,10 +1445,11 @@ una planta.
 
 \vspace{0.8em}
 \noindent Se compuso en Palatino (URW Palladio) para el texto y Avant
-Garde Gothic (URW Gothic) para los títulos. Se terminó de imprimir en
-\pendiente{mes y año} en \pendiente{imprenta, ciudad}, sobre papel
-\pendiente{tipo y gramaje}, con una tirada de \pendiente{cantidad}
-ejemplares.
+Garde Gothic (URW Gothic) para los títulos.
+% --- Datos de impresión: completar cuando se contrate la imprenta ---
+% Se terminó de imprimir en [MES] de [AÑO] en [IMPRENTA], [CIUDAD], sobre
+% papel [PAPEL INTERIOR] de [GRAMAJE] g/m², con tapas en [CARTULINA].
+% Tirada: [N] ejemplares.
 
 \vspace{2.2em}
 \begin{center}
