@@ -6,7 +6,9 @@
 %  o bien:         latexmk -pdf cafayate.tex
 %
 %  Las ilustraciones definitivas van en la carpeta ./img con los nombres
-%  que se usan en este archivo (01-cubierta.jpg ... 23-contratapa.jpg).
+%  que se usan en este archivo (01-cubierta.jpg ... 26-botellas-en-el-
+%  muro.jpg). Las 24 a 26 se dibujan con PROMPTS-IMAGENES.md; mientras
+%  falte alguna, el libro compila con un recuadro «Lámina pendiente».
 %  Si se reemplaza alguna, mantener el mismo nombre y la misma proporción
 %  para que el libro compile sin tocar una sola línea.
 % =====================================================================
@@ -262,10 +264,27 @@
   \PackageWarningNoLine{cafayate}{Faltan \the\value{faltantes} datos
     editoriales (recuadros amarillos). Ver PENDIENTES-editorial.md}\fi}
 
+% Lámina que todavía no está en img/: en lugar de cortar la compilación,
+% se imprime un recuadro crema con el aviso en amarillo, y se cuenta como
+% dato faltante. #1 es el ancho del recuadro (el filete va por dentro);
+% #2, el archivo.
+\newcommand{\laminapendiente}[2]{%
+  \begin{tikzpicture}
+    \node[draw=verdehoja, fill=crema, line width=0.6pt, dashed,
+          minimum width=\dimexpr#1-0.6pt\relax, minimum height=0.6\dimexpr#1\relax,
+          inner sep=0pt] {\faltante{Lámina pendiente: \texttt{\detokenize\expandafter{#2}}}};
+  \end{tikzpicture}}
+% \imagen[ancho del recuadro]{opciones}{archivo}: \includegraphics si el
+% archivo existe, y el recuadro de lámina pendiente si no. \lamina le pasa
+% su ancho: para el recuadro tiene que ser una sola medida (0.5\textwidth),
+% no una lista de opciones.
+\newcommand{\imagen}[3][0.8\textwidth]{%
+  \IfFileExists{#3}{\includegraphics[#2]{#3}}{\laminapendiente{#1}{#3}}}
+
 % Imagen a caja completa con epígrafe
 \newcommand{\lamina}[3][\textwidth]{%
   \begin{figure}[htbp]\centering
-    \includegraphics[width=#1]{#2}\par\vspace{0.5em}
+    \imagen[#1]{width=#1}{#2}\par\vspace{0.5em}
     {\footnotesize\sffamily\color{gris}#3}
   \end{figure}}
 
@@ -278,7 +297,7 @@
   \thispagestyle{empty}
   \vspace*{\fill}
   \begin{center}
-    \includegraphics[width=\textwidth,height=0.84\textheight,keepaspectratio]{#1}\par\vspace{0.7em}
+    \imagen{width=\textwidth,height=0.84\textheight,keepaspectratio}{#1}\par\vspace{0.7em}
     {\footnotesize\sffamily\color{gris}#2}
   \end{center}
   \vspace*{\fill}\clearpage}
@@ -560,7 +579,16 @@ acudir a la guardia más cercana llevando una muestra de la planta.
 % entrada («Colofón») queda sola en una página nueva.
 \addtocontents{toc}{\protect\enlargethispage{3\baselineskip}}
 \tableofcontents
-\cleardoublepage
+
+% --- La casa, enfrentada a las palabras de la autora ---
+% Ocupa el verso que antes quedaba en blanco después del índice. Con
+% \clearalapar cae siempre en página par aunque el índice crezca, y las
+% palabras de la autora quedan enfrente, en la impar.
+\clearalapar
+\laminapagina{\carpetaimg/24-la-casa.jpg}{%
+  La casa en la quebrada: muros de barro, horcones de algarrobo, techo de
+  caña y un piso armado con azulejos partidos. El monte empieza donde
+  termina la galería.}
 
 % --- Introducción ---
 \chapter*{Palabras de la autora}
@@ -646,6 +674,10 @@ sobre el riñón—.
 Además, lo cercano se conoce. Uno sabe dónde está esa mata de jarilla,
 en qué mes florece el chañar, qué año dio más algarroba. Ese conocimiento
 acumulado vale más que cualquier etiqueta.
+
+\lamina[0.88\textwidth]{\carpetaimg/25-desde-la-galeria.jpg}{%
+  Desde la galería, el monte está a diez pasos: algarrobos, jarillas y,
+  detrás, el cerro colorado. La botica no queda lejos.}
 
 \section{Recolectar sin depredar}
 
@@ -1465,7 +1497,8 @@ una planta.
 
 \vspace{0.8em}
 \noindent Se compuso en Palatino (URW Palladio) para el texto y Avant
-Garde Gothic (URW Gothic) para los títulos.
+Garde Gothic (URW Gothic) para los títulos. Las láminas de la casa se
+dibujaron a partir de fotografías que aportó la autora.
 
 \vspace{0.8em}
 \noindent Se terminó de imprimir en
@@ -1473,6 +1506,10 @@ Garde Gothic (URW Gothic) para los títulos.
 ciudad}, sobre papel \dato\datoPapel{papel y gramaje del interior}, con
 tapas en \dato\datoTapas{cartulina de tapas}. Tirada:
 \dato\datoTirada{cantidad} ejemplares.
+
+\lamina[0.5\textwidth]{\carpetaimg/26-botellas-en-el-muro.jpg}{%
+  Botellas embutidas en un muro de barro: la luz del monte entra verde.
+  Una casa hecha, como este libro, con lo que había cerca.}
 
 \vspace{2.2em}
 \begin{center}
