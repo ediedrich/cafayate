@@ -73,12 +73,12 @@
 \usepackage[hidelinks]{hyperref}
 
 % ------------------------- Color de imprenta --------------------------
-% Con imprenta=true las láminas salen de img-cmyk/ (convertidas por
+% Con imprenta=true las láminas salen de img/ (convertidas por
 % cmyk.py) y el PDF declara su perfil de salida (OutputIntent). Si
 % todavía no se corrió cmyk.py, usa las láminas RGB de img/ y avisa.
 \ifimprenta
   \IfFileExists{perfil-salida.tex}{%
-    \newcommand{\carpetaimg}{img-cmyk}%
+    \newcommand{\carpetaimg}{img}%
     \input{perfil-salida}%
   }{%
     \newcommand{\carpetaimg}{img}%
